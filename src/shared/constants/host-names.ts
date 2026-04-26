@@ -5,17 +5,17 @@
  */
 export const routeNames = {
   /** Главная страница */
-  MAIN_PAGE: "/",
+  MAIN_PAGE: '/',
 
   /** Страница входа */
-  LOGIN_PAGE: "/login",
+  LOGIN_PAGE: '/login',
 
   /** Страница регистрации */
-  REGISTER_PAGE: "/register",
+  REGISTER_PAGE: '/register',
 
   /** Страница редактора */
-  EDITOR_PAGE: "/editor",
+  EDITOR_PAGE: '/editor',
 
   /** Страница проектов */
-  PROJECTS_PAGE: "/projects",
+  PROJECTS_PAGE: '/projects',
 };

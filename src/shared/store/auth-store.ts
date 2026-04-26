@@ -1,7 +1,7 @@
 // Core
-import { makeAutoObservable } from "mobx";
+import { makeAutoObservable } from 'mobx';
 
-const ACCESS_TOKEN_KEY = "accessToken";
+const ACCESS_TOKEN_KEY = 'accessToken';
 
 class AuthStore {
   accessToken: string | null = localStorage.getItem(ACCESS_TOKEN_KEY);

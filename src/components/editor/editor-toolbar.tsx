@@ -1,9 +1,9 @@
 // Core
-import React, { useMemo } from "react";
+import React, { useMemo } from 'react';
 // Editor
-import { makeEditorHandlers, useEditorHub } from "@planara/react";
+import { makeEditorHandlers, useEditorHub } from '@planara/react';
 // Components
-import { UiButton } from "../button";
+import { UiButton } from '../button';
 
 export const EditorToolbar: React.FC = () => {
   const hub = useEditorHub();

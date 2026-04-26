@@ -1,18 +1,18 @@
 // Core
-import { createRoot } from "react-dom/client";
+import { createRoot } from 'react-dom/client';
 // Styles
-import "./index.css";
+import './index.css';
 // Routing
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { routeNames } from "@/shared/constants/host-names.ts";
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { routeNames } from '@/shared/constants/host-names.ts';
 // Pages
-import EditorPage from "@/pages/editor";
-import RegisterPage from "@/pages/auth/register";
+import EditorPage from '@/pages/editor';
+import RegisterPage from '@/pages/auth/register';
 // Apollo
-import { apolloClient } from "@/shared/apollo/client.ts";
-import { ApolloProvider } from "@apollo/client/react";
+import { apolloClient } from '@/shared/apollo/client.ts';
+import { ApolloProvider } from '@apollo/client/react';
 
-createRoot(document.getElementById("root")!).render(
+createRoot(document.getElementById('root')!).render(
   <ApolloProvider client={apolloClient}>
     <BrowserRouter>
       <Routes>

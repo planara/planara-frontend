@@ -1,8 +1,8 @@
 // Core
-import { ApolloClient, HttpLink, InMemoryCache } from "@apollo/client";
-import { SetContextLink } from "@apollo/client/link/context";
+import { ApolloClient, HttpLink, InMemoryCache } from '@apollo/client';
+import { SetContextLink } from '@apollo/client/link/context';
 // Store
-import { authStore } from "@/shared/store/auth-store.ts";
+import { authStore } from '@/shared/store/auth-store.ts';
 
 const httpLink = new HttpLink({
   uri: import.meta.env.VITE_GRAPHQL_URL,

@@ -1,5 +1,5 @@
 // Types
-import type { MouseEventHandler } from "react";
+import type { MouseEventHandler } from 'react';
 
 export const UiButton = (props: {
   text: string;

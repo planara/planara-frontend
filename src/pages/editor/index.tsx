@@ -1,8 +1,8 @@
 // Editor
-import { EditorCanvas, EditorProvider } from "@planara/react";
+import { EditorCanvas, EditorProvider } from '@planara/react';
 // Components
-import { EditorToolbar } from "../../components/editor/editor-toolbar.tsx";
-import FigureStats from "../../components/editor/figure-stats.tsx";
+import { EditorToolbar } from '../../components/editor/editor-toolbar.tsx';
+import FigureStats from '../../components/editor/figure-stats.tsx';
 
 export const EditorPage = () => {
   return (
