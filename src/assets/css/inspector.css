@@ -1,0 +1,9 @@
+.figure-stats__layout {
+  width: 100%;
+  max-width: 300px;
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  justify-content: center;
+  padding: 30px 20px;
+}
