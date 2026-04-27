@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url';
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
-  envDir: 'envs',
+  envDir: './src/envs',
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),

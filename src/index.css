@@ -2,6 +2,16 @@
 
 @import 'assets/css/button.css';
 @import 'assets/css/inspector.css';
+@import 'assets/css/auth.css';
+@import 'assets/css/layout.css';
+@import 'assets/css/input.css';
+@import 'assets/css/home.css';
+@import 'assets/css/shell.css';
+@import 'assets/css/header.css';
+@import 'assets/css/footer.css';
+@import 'assets/css/settings.css';
+@import 'assets/css/alert.css';
+@import 'assets/css/projects.css';
 
 /* --------------------------------------------- */
 
@@ -108,6 +118,52 @@ input {
 
   --hover: #3d3d3d;
   --active: #4a4a4a;
+}
+
+:root {
+  --text-primary: #111111;
+  --text-secondary: #666666;
+  --background-primary: #f6f6f6;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--background-primary);
+  color: var(--text-primary);
+  font-family: 'Manrope Variable', Manrope, system-ui, sans-serif;
+  font-kerning: normal;
+  font-variant-ligatures: normal;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  letter-spacing: 0;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  margin-block-start: 0;
+  margin-block-end: 0;
 }
 
 :root {

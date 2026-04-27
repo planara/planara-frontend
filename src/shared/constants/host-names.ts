@@ -5,7 +5,7 @@
  */
 export const routeNames = {
   /** Главная страница */
-  MAIN_PAGE: '/',
+  HOME_PAGE: '/home',
 
   /** Страница входа */
   LOGIN_PAGE: '/login',
@@ -18,4 +18,7 @@ export const routeNames = {
 
   /** Страница проектов */
   PROJECTS_PAGE: '/projects',
+
+  /** Страница настроек */
+  SETTINGS_PAGE: '/settings',
 };
