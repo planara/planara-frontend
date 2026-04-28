@@ -1,9 +1,8 @@
 // Core
-import { ApolloClient, ApolloLink, HttpLink, InMemoryCache } from '@apollo/client';
+import { ApolloClient, ApolloLink, HttpLink, InMemoryCache, Observable } from '@apollo/client';
 import { CombinedGraphQLErrors, ServerError } from '@apollo/client/errors';
 import { ErrorLink } from '@apollo/client/link/error';
 import { SetContextLink } from '@apollo/client/link/context';
-import { Observable } from 'rxjs';
 // Store
 import { authStore } from '@/shared/store/auth-store';
 // Services
@@ -15,6 +14,8 @@ if (!graphqlUrl) {
   throw new Error('VITE_GRAPHQL_URL is not defined');
 }
 
+const TOKEN_EXPIRE_SKEW_MS = 30_000;
+
 let refreshPromise: ReturnType<typeof refreshAuthSession> | null = null;
 
 const getRefreshPromise = () => {
@@ -25,6 +26,48 @@ const getRefreshPromise = () => {
   }
 
   return refreshPromise;
+};
+
+const isExpired = (expiresAtUtc: string | null, skewMs = TOKEN_EXPIRE_SKEW_MS) => {
+  if (!expiresAtUtc) {
+    return true;
+  }
+
+  return new Date(expiresAtUtc).getTime() <= Date.now() + skewMs;
+};
+
+const logoutAfterRefreshFail = () => {
+  authStore.logout();
+
+  if (window.location.pathname !== '/login') {
+    window.location.href = '/login';
+  }
+};
+
+const ensureValidAccessToken = async () => {
+  const accessToken = authStore.accessToken;
+
+  if (!accessToken) {
+    return null;
+  }
+
+  const accessTokenExpired = isExpired(authStore.accessExpiresAtUtc);
+
+  if (!accessTokenExpired) {
+    return accessToken;
+  }
+
+  const refreshToken = authStore.refreshToken;
+  const refreshTokenExpired = isExpired(authStore.refreshExpiresAtUtc, 0);
+
+  if (!refreshToken || refreshTokenExpired) {
+    logoutAfterRefreshFail();
+    throw new Error('Refresh token is expired');
+  }
+
+  const tokens = await getRefreshPromise();
+
+  return tokens.accessToken;
 };
 
 const isAuthError = (error: unknown) => {
@@ -52,14 +95,6 @@ const isAuthError = (error: unknown) => {
   return false;
 };
 
-const logoutAfterRefreshFail = () => {
-  authStore.logout();
-
-  if (window.location.pathname !== '/login') {
-    window.location.href = '/login';
-  }
-};
-
 const errorLink = new ErrorLink(({ error, operation, forward }) => {
   if (!isAuthError(error)) {
     return;
@@ -76,6 +111,7 @@ const errorLink = new ErrorLink(({ error, operation, forward }) => {
           headers: {
             ...oldHeaders,
             Authorization: `Bearer ${tokens.accessToken}`,
+            'GraphQL-Preflight': '1',
           },
         });
 
@@ -96,12 +132,13 @@ const errorLink = new ErrorLink(({ error, operation, forward }) => {
   });
 });
 
-const authLink = new SetContextLink((prevContext) => {
-  const token = authStore.accessToken;
+const authLink = new SetContextLink(async (prevContext) => {
+  const token = await ensureValidAccessToken();
 
   return {
     headers: {
       ...prevContext.headers,
+      'GraphQL-Preflight': '1',
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
     },
   };

@@ -1,42 +1,42 @@
-// Core
-import React, { type JSX, useState } from 'react';
-// Types
-import type { AlertType } from '@/types/layout/alert/alert-type.ts';
+import type { ReactNode } from 'react';
+import { useCallback, useMemo, useState } from 'react';
+
+import { AlertContext } from './alert-context';
+import type { AlertType } from '@/types/layout/alert/alert-type';
 import { AlertPosition } from '@/types/layout/alert/alert-position';
 import { AlertStatus } from '@/types/layout/alert/alert-status';
-// Contexts
-import { AlertContext } from './alert-context';
 
-/** Провайдер контекста оповещений. */
-export const AlertProvider: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}: {
-  children: React.ReactNode;
-}): JSX.Element => {
+type AlertProviderProps = {
+  children: ReactNode;
+};
+
+export const AlertProvider = ({ children }: AlertProviderProps) => {
   const [alerts, setAlerts] = useState<AlertType[]>([]);
 
-  /**
-   * Добавляет новое уведомление.
-   * @param {string} message - Сообщение для уведомления.
-   * @param status - Тип сообщения
-   * @param position - Расположение на странице
-   */
-  const addAlert = (message: string, status: AlertStatus, position: AlertPosition) => {
-    const id = Date.now();
-    setAlerts([...alerts, { id, message, status, position }]);
-  };
+  const addAlert = useCallback((message: string, status: AlertStatus, position: AlertPosition) => {
+    setAlerts((prev) => [
+      ...prev,
+      {
+        id: Date.now() + Math.random(),
+        message,
+        status,
+        position,
+      },
+    ]);
+  }, []);
 
-  /**
-   * Удаляет уведомление по ID.
-   * @param {number} id - Идентификатор уведомления для удаления.
-   */
-  const removeAlert = (id: number) => {
-    setAlerts(alerts.filter((alert) => alert.id !== id));
-  };
+  const removeAlert = useCallback((id: number) => {
+    setAlerts((prev) => prev.filter((alert) => alert.id !== id));
+  }, []);
 
-  return (
-    <AlertContext.Provider value={{ alerts, addAlert, removeAlert }}>
-      {children}
-    </AlertContext.Provider>
+  const value = useMemo(
+    () => ({
+      alerts,
+      addAlert,
+      removeAlert,
+    }),
+    [alerts, addAlert, removeAlert],
   );
+
+  return <AlertContext.Provider value={value}>{children}</AlertContext.Provider>;
 };

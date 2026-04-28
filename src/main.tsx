@@ -16,6 +16,12 @@ import RegisterPage from '@/pages/auth/register';
 import LoginPage from '@/pages/auth/login.tsx';
 import HomePage from '@/pages/home';
 import SettingsPage from '@/pages/settings';
+import ProjectsPage from '@/pages/projects';
+import SdkPage from '@/pages/sdk';
+import ServerErrorPage from '@/pages/error/erver-error-page.tsx';
+import NotFoundPage from '@/pages/error/not-found-page.tsx';
+import LandingPage from '@/pages/landing';
+import SdkDocsPage from '@/pages/sdk/sdk-docs-page.tsx';
 // Apollo
 import { apolloClient } from '@/shared/apollo/client';
 import { ApolloProvider } from '@apollo/client/react';
@@ -28,7 +34,7 @@ import Alert from '@/components/layout/alert.tsx';
 import type { AlertType } from '@/types/layout/alert/alert-type.ts';
 import { useAlerts } from '@/hooks/layout/use-alerts.ts';
 import { AlertProvider } from '@/shared/contexts/alert/alert-provider.tsx';
-import ProjectsPage from '@/pages/projects';
+import { PrivateRoute, PublicRoute } from '@/components';
 
 // App layout
 const App = () => {
@@ -60,12 +66,22 @@ const App = () => {
       </div>
 
       <Routes>
-        <Route path={routeNames.EDITOR_PAGE} element={<EditorPage />} />
-        <Route path={routeNames.REGISTER_PAGE} element={<RegisterPage />} />
-        <Route path={routeNames.LOGIN_PAGE} element={<LoginPage />} />
-        <Route path={routeNames.HOME_PAGE} element={<HomePage />} />
-        <Route path={routeNames.SETTINGS_PAGE} element={<SettingsPage />} />
-        <Route path={routeNames.PROJECTS_PAGE} element={<ProjectsPage />} />
+        <Route element={<PrivateRoute />}>
+          <Route path={routeNames.HOME_PAGE} element={<HomePage />} />
+          <Route path={routeNames.SETTINGS_PAGE} element={<SettingsPage />} />
+          <Route path={routeNames.PROJECTS_PAGE} element={<ProjectsPage />} />
+          <Route path={routeNames.EDITOR_PAGE} element={<EditorPage />} />
+        </Route>
+        <Route element={<PublicRoute />}>
+          <Route path={routeNames.REGISTER_PAGE} element={<RegisterPage />} />
+          <Route path={routeNames.LOGIN_PAGE} element={<LoginPage />} />
+        </Route>
+        <Route path={routeNames.LANDING_PAGE} element={<LandingPage />} />
+        <Route path={routeNames.SDK_PAGE} element={<SdkPage />} />
+        <Route path={routeNames.SERVER_ERROR_PAGE} element={<ServerErrorPage />} />
+        <Route path={routeNames.SDK_DOCS_PAGE} element={<SdkDocsPage />} />
+        <Route path={routeNames.SDK_DOCS_PAGE_DEEP} element={<SdkDocsPage />} />
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </>
   );

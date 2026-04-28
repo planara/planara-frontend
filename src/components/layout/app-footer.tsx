@@ -24,9 +24,8 @@ export const AppFooter = () => {
         </div>
 
         <div className="app-footer__meta">
-          <span>© 2026 Planara</span>
+          <span>© {new Date().getFullYear()} Planara</span>
           <span>React · Three.js · TypeScript</span>
-
           <a
             className="app-footer__github"
             href="https://github.com/planara"

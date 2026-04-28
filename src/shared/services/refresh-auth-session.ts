@@ -56,6 +56,8 @@ export const refreshAuthSession = async () => {
   authStore.setSession({
     accessToken: result.data.refresh.accessToken,
     refreshToken: result.data.refresh.refreshToken,
+    accessExpiresAtUtc: result.data.refresh.accessExpiresAtUtc,
+    refreshExpiresAtUtc: result.data.refresh.refreshExpiresAtUtc,
   });
 
   return result.data.refresh;
