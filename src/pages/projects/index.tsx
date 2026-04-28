@@ -11,8 +11,8 @@ import {
 } from '@fluentui/react-icons';
 
 import { AppShell } from '@/components/layout/app-shell';
-import UiModal from '@/components/modal/ui-modal';
-import CreateProjectModal from '@/components/modal/project/create-project-modal';
+import UiModal from '@/components/ui/ui-modal.tsx';
+import CreateProjectModal from '@/components/projects/create-project-modal';
 
 import { useAlerts } from '@/hooks/layout/use-alerts';
 

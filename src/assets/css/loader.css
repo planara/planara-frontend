@@ -1,0 +1,24 @@
+.ui-loader {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  line-height: 1;
+}
+
+.ui-loader--centered {
+  width: 100%;
+  min-height: 120px;
+  justify-content: center;
+}
+
+.ui-loader--inline {
+  vertical-align: middle;
+}
+
+.ui-loader__label {
+  color: #777777;
+  font-size: 12px;
+  font-weight: 850;
+  line-height: 1;
+  white-space: nowrap;
+}

@@ -82,7 +82,7 @@
 
 .app-header__nav-link {
   position: relative;
-  padding: 10px 0;
+  padding: 10px 5px;
   display: inline-flex;
   align-items: center;
   gap: 7px;

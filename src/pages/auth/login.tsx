@@ -47,7 +47,9 @@ export const LoginPage = () => {
 
       authStore.setSession({
         accessToken: response.accessToken,
+        accessExpiresAtUtc: response.accessExpiresAtUtc,
         refreshToken: response.refreshToken,
+        refreshExpiresAtUtc: response.refreshExpiresAtUtc,
       });
 
       addAlert('Вы успешно вошли в аккаунт', AlertStatus.Success, AlertPosition.TopRight);

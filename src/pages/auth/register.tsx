@@ -48,7 +48,9 @@ export const RegisterPage = () => {
 
       authStore.setSession({
         accessToken: response.accessToken,
+        accessExpiresAtUtc: response.accessExpiresAtUtc,
         refreshToken: response.refreshToken,
+        refreshExpiresAtUtc: response.refreshExpiresAtUtc,
       });
 
       addAlert('Аккаунт успешно создан', AlertStatus.Success, AlertPosition.TopRight);

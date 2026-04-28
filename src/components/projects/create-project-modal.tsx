@@ -3,26 +3,28 @@ import { type SubmitEvent, useState } from 'react';
 import { DismissRegular, SaveRegular } from '@fluentui/react-icons';
 
 import UiInput from '@/components/input';
+import { UiButton } from '@/components/ui';
+import { UiButtonVariant } from '@/types';
 
-type CreateProjectForm = {
+export type CreateProjectData = {
   name: string;
   description: string;
 };
 
 type CreateProjectModalProps = {
   onClose: () => void;
-  onCreate: (data: CreateProjectForm) => void;
+  onCreate: (data: CreateProjectData) => void;
 };
 
-const createEmptyForm = (): CreateProjectForm => ({
+const createEmptyForm = (): CreateProjectData => ({
   name: '',
   description: '',
 });
 
 export const CreateProjectModal = ({ onClose, onCreate }: CreateProjectModalProps) => {
-  const [form, setForm] = useState<CreateProjectForm>(() => createEmptyForm());
+  const [form, setForm] = useState<CreateProjectData>(() => createEmptyForm());
 
-  const updateField = (field: keyof CreateProjectForm, value: string) => {
+  const updateField = (field: keyof CreateProjectData, value: string) => {
     setForm((prev) => ({
       ...prev,
       [field]: value,
@@ -42,8 +44,7 @@ export const CreateProjectModal = ({ onClose, onCreate }: CreateProjectModalProp
     <form className="create-project-modal" onSubmit={handleSubmit}>
       <div className="create-project-modal__header">
         <div>
-          <p className="projects-section__eyebrow">Новый проект</p>
-
+          <p className="ui-section-header__eyebrow">Новый проект</p>
           <h2 className="create-project-modal__title">Создать проект</h2>
         </div>
 
@@ -73,14 +74,13 @@ export const CreateProjectModal = ({ onClose, onCreate }: CreateProjectModalProp
       </div>
 
       <div className="create-project-modal__actions">
-        <button className="projects-button projects-button--light" type="button" onClick={onClose}>
+        <UiButton variant={UiButtonVariant.Light} onClick={onClose}>
           Отмена
-        </button>
+        </UiButton>
 
-        <button className="projects-button projects-button--dark" type="submit">
-          <SaveRegular />
-          <span>Создать</span>
-        </button>
+        <UiButton variant={UiButtonVariant.Dark} type="submit" icon={<SaveRegular />}>
+          Создать
+        </UiButton>
       </div>
     </form>
   );

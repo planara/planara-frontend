@@ -11,11 +11,11 @@ export const AuthPagePreview = () => {
 
       <div className="auth-page__preview-content">
         <div className="auth-page__preview-scene">
-          <div className="auth-page__preview-grid" />
-          <div className="auth-page__preview-object">
-            <div className="auth-page__preview-ring" />
-            <div className="auth-page__preview-sphere" />
-          </div>
+          <img
+            className="auth-page__preview-image"
+            src="/assets/editor-poster.png"
+            alt="Превью редактора Planara"
+          />
         </div>
 
         <div className="auth-page__preview-caption">

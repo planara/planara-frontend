@@ -17,7 +17,7 @@
     "@fluentui/react-components": "^9.73.8",
     "@fluentui/react-icons": "^2.0.325",
     "@fontsource-variable/manrope": "^5.2.8",
-    "@planara/react": "^1.0.1",
+    "@planara/react": "^1.1.0",
     "graphql": "^16.13.2",
     "mobx": "^6.15.0",
     "mobx-react-lite": "^4.1.1",
