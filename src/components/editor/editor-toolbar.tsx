@@ -63,7 +63,11 @@ export const EditorToolbar = ({ statsOpen, onToggleStats }: EditorToolbarProps) 
       <nav className="editor-toolbar__menus" aria-label="Панель редактора">
         <Menu>
           <MenuTrigger disableButtonEnhancement>
-            <Button appearance="subtle" className="editor-toolbar__menu-button" icon={<GridRegular />}>
+            <Button
+              appearance="subtle"
+              className="editor-toolbar__menu-button"
+              icon={<GridRegular />}
+            >
               Вид
             </Button>
           </MenuTrigger>
@@ -98,7 +102,11 @@ export const EditorToolbar = ({ statsOpen, onToggleStats }: EditorToolbarProps) 
 
         <Menu>
           <MenuTrigger disableButtonEnhancement>
-            <Button appearance="subtle" className="editor-toolbar__menu-button" icon={<BoxRegular />}>
+            <Button
+              appearance="subtle"
+              className="editor-toolbar__menu-button"
+              icon={<BoxRegular />}
+            >
               Выделение
             </Button>
           </MenuTrigger>
@@ -114,7 +122,11 @@ export const EditorToolbar = ({ statsOpen, onToggleStats }: EditorToolbarProps) 
 
         <Menu>
           <MenuTrigger disableButtonEnhancement>
-            <Button appearance="subtle" className="editor-toolbar__menu-button" icon={<AddRegular />}>
+            <Button
+              appearance="subtle"
+              className="editor-toolbar__menu-button"
+              icon={<AddRegular />}
+            >
               Добавить
             </Button>
           </MenuTrigger>

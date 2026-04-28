@@ -301,8 +301,7 @@
   border: 1px solid #191919;
   border-radius: 24px;
   background:
-    radial-gradient(circle at 90% 0%, rgba(255, 255, 255, 0.09), transparent 34%),
-    #0f0f0f;
+    radial-gradient(circle at 90% 0%, rgba(255, 255, 255, 0.09), transparent 34%), #0f0f0f;
   box-shadow: 0 24px 70px rgba(0, 0, 0, 0.16);
 }
 
@@ -366,13 +365,7 @@
 .sdk-docs-code code {
   color: rgba(255, 255, 255, 0.88);
   font-family:
-    ui-monospace,
-    SFMono-Regular,
-    Menlo,
-    Monaco,
-    Consolas,
-    'Liberation Mono',
-    'Courier New',
+    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New',
     monospace;
   font-size: 13px;
   line-height: 1.75;
@@ -573,8 +566,7 @@
   justify-content: space-between;
   gap: 24px;
   background:
-    radial-gradient(circle at 80% 12%, rgba(255, 255, 255, 0.16), transparent 34%),
-    #111111;
+    radial-gradient(circle at 80% 12%, rgba(255, 255, 255, 0.16), transparent 34%), #111111;
   color: #ffffff;
   box-shadow: 0 30px 90px rgba(0, 0, 0, 0.18);
 }

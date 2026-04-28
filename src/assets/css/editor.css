@@ -201,7 +201,7 @@
 }
 
 .editor-renderer::before {
-  content: "";
+  content: '';
   position: absolute;
   inset: 18px;
   z-index: 2;

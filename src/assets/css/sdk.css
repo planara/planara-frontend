@@ -50,8 +50,7 @@
   border: 1px solid #111111;
   border-radius: 30px;
   background:
-    radial-gradient(circle at 80% 12%, rgba(255, 255, 255, 0.16), transparent 34%),
-    #111111;
+    radial-gradient(circle at 80% 12%, rgba(255, 255, 255, 0.16), transparent 34%), #111111;
   color: #ffffff;
   box-shadow: 0 30px 80px rgba(0, 0, 0, 0.18);
 }

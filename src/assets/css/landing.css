@@ -90,7 +90,7 @@
 
 .landing-header__nav a::after,
 .landing-header__link::after {
-  content: "";
+  content: '';
   position: absolute;
   right: 0;
   bottom: -7px;
@@ -397,7 +397,7 @@
 }
 
 .landing-editor-frame__body::before {
-  content: "";
+  content: '';
   position: absolute;
   inset: 20px;
   z-index: 2;
@@ -455,8 +455,7 @@
   position: relative;
   z-index: 2;
   border-radius: 50%;
-  background:
-    radial-gradient(circle at 30% 25%, #ffffff 0%, #d9d9d9 16%, #777777 42%, #111111 78%);
+  background: radial-gradient(circle at 30% 25%, #ffffff 0%, #d9d9d9 16%, #777777 42%, #111111 78%);
   box-shadow:
     0 46px 110px rgba(0, 0, 0, 0.62),
     inset -22px -24px 52px rgba(0, 0, 0, 0.48),
@@ -697,7 +696,7 @@
 }
 
 .landing-geometry-demo::before {
-  content: "";
+  content: '';
   position: absolute;
   inset: 16px;
   z-index: 2;
@@ -830,8 +829,7 @@
   padding: 28px;
   border-radius: 34px;
   background:
-    radial-gradient(circle at 80% 12%, rgba(255, 255, 255, 0.16), transparent 34%),
-    #111111;
+    radial-gradient(circle at 80% 12%, rgba(255, 255, 255, 0.16), transparent 34%), #111111;
   color: #ffffff;
   box-shadow: 0 30px 90px rgba(0, 0, 0, 0.18);
 }
@@ -995,7 +993,7 @@
 }
 
 .landing-sdk__preview::before {
-  content: "";
+  content: '';
   position: absolute;
   inset: 16px;
   z-index: 2;
@@ -1190,8 +1188,7 @@
   justify-content: space-between;
   gap: 28px;
   background:
-    radial-gradient(circle at 80% 12%, rgba(255, 255, 255, 0.16), transparent 34%),
-    #111111;
+    radial-gradient(circle at 80% 12%, rgba(255, 255, 255, 0.16), transparent 34%), #111111;
   color: #ffffff;
   box-shadow: 0 30px 90px rgba(0, 0, 0, 0.18);
 }
