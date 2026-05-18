@@ -521,7 +521,7 @@
 }
 
 .ui-viewer::before {
-  content: "";
+  content: '';
   position: absolute;
   inset: 18px;
   z-index: 3;

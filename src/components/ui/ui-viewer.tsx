@@ -124,10 +124,15 @@ const UiViewerContent = ({
   const stopLoadingRef = useRef(stopLoading);
   const addAlertRef = useRef(addAlert);
 
-  sourceRef.current = source;
-  startLoadingRef.current = startLoading;
-  stopLoadingRef.current = stopLoading;
-  addAlertRef.current = addAlert;
+  useEffect(() => {
+    sourceRef.current = source;
+  }, [source]);
+
+  useEffect(() => {
+    startLoadingRef.current = startLoading;
+    stopLoadingRef.current = stopLoading;
+    addAlertRef.current = addAlert;
+  }, [startLoading, stopLoading, addAlert]);
 
   useEffect(() => {
     if (!hub) {
