@@ -1,3 +1,4 @@
+// Types
 import type { ReactNode } from 'react';
 
 type UiSectionPanelProps = {

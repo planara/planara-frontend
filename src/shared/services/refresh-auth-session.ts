@@ -1,9 +1,9 @@
 // Core
 import { print } from 'graphql';
 // GraphQL
-import { REFRESH_MUTATION, type RefreshMutationData } from '@/graphql/auth/auth.mutations.ts';
+import { REFRESH_MUTATION, type RefreshMutationData } from '@/graphql/auth';
 // Store
-import { authStore } from '@/shared/store/auth-store';
+import { authStore } from '@/shared';
 
 type GraphQlResponse<TData> = {
   data?: TData;
@@ -15,10 +15,10 @@ type GraphQlResponse<TData> = {
   }>;
 };
 
-const graphqlUrl = import.meta.env.VITE_GRAPHQL_URL;
+const graphqlUrl = import.meta.env.VITE_API_URL;
 
 if (!graphqlUrl) {
-  throw new Error('VITE_GRAPHQL_URL is not defined');
+  throw new Error('VITE_API_URL is not defined');
 }
 
 export const refreshAuthSession = async () => {
@@ -28,7 +28,7 @@ export const refreshAuthSession = async () => {
     throw new Error('Refresh token is missing');
   }
 
-  const response = await fetch(graphqlUrl, {
+  const response = await fetch(`${graphqlUrl}/api/`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

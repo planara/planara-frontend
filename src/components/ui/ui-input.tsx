@@ -1,17 +1,19 @@
+// Core
 import {
   type ChangeEvent,
   type KeyboardEventHandler,
   type MouseEventHandler,
   useState,
 } from 'react';
+// Icons
 import {
   DismissRegular,
   ErrorCircleRegular,
   EyeOffRegular,
   EyeRegular,
 } from '@fluentui/react-icons';
-
-import { InputType } from '@/types/input/input-type';
+// Types
+import { InputType } from '@/types';
 
 type UiInputProps = {
   id: string;

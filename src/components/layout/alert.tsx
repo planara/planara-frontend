@@ -3,8 +3,7 @@ import { type JSX, useEffect, useMemo, useState } from 'react';
 // Components
 import { CheckmarkCircleRegular, DismissCircleRegular, InfoRegular } from '@fluentui/react-icons';
 // Types
-import { AlertPosition } from '@/types/layout/alert/alert-position';
-import { AlertStatus } from '@/types/layout/alert/alert-status';
+import { AlertPosition, AlertStatus } from '@/types';
 
 type AlertProps = {
   message: string;

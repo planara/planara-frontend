@@ -1,5 +1,5 @@
-import type { ReactNode } from 'react';
-import { useEffect } from 'react';
+// Core
+import { useEffect, type ReactNode } from 'react';
 
 type UiModalProps = {
   open: boolean;

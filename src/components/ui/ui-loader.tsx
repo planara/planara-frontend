@@ -1,3 +1,4 @@
+// Components
 import { BeatLoader } from 'react-spinners';
 
 type UiLoaderSize = 'tiny' | 'small' | 'medium' | 'large';

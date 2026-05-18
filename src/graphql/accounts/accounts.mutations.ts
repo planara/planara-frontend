@@ -1,9 +1,7 @@
 // Apollo
 import { gql } from '@apollo/client';
-
 // Types
-import type { UpdateProfileRequest } from '@/types/api/requests/accounts/update-profile-request';
-import type { ProfileResponse } from '@/types/api/responses/accounts/profile-response';
+import type { UpdateProfileRequest, ProfileResponse } from '@/types';
 
 export type UpdateProfileMutationData = {
   updateProfile: ProfileResponse;

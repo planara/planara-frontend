@@ -1,3 +1,6 @@
+// Routing
+import { useNavigate } from 'react-router-dom';
+// Icons
 import {
   AddRegular,
   ArrowRightRegular,
@@ -7,10 +10,10 @@ import {
   SettingsRegular,
   SparkleRegular,
 } from '@fluentui/react-icons';
-import { useNavigate } from 'react-router-dom';
-
-import { AppShell } from '@/components/layout/app-shell';
-import { routeNames } from '@/shared/constants/host-names.ts';
+// Components
+import { AppShell } from '@/components';
+// Shared
+import { routeNames } from '@/shared';
 
 const mockProjects = [
   {

@@ -1,9 +1,10 @@
+// Core
 import { type SubmitEvent, useState } from 'react';
-
+// Icons
 import { DismissRegular, SaveRegular } from '@fluentui/react-icons';
-
-import UiInput from '@/components/input';
-import { UiButton } from '@/components/ui';
+// Components
+import { UiButton, UiInput } from '@/components';
+// Types
 import { UiButtonVariant } from '@/types';
 
 export type CreateProjectData = {

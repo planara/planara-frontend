@@ -1,6 +1,6 @@
-import type { SubmitEvent } from 'react';
-import { useEffect, useMemo, useState } from 'react';
-
+// Core
+import { useEffect, useMemo, useState, type SubmitEvent } from 'react';
+// Icons
 import {
   ArrowClockwiseRegular,
   EditRegular,
@@ -10,25 +10,24 @@ import {
   SignOutRegular,
   SparkleRegular,
 } from '@fluentui/react-icons';
-
-import { AppShell } from '@/components/layout/app-shell';
-import SettingsInputField from '@/components/input/settings-input';
-
-import { useAccount } from '@/hooks/accounts/use-account';
-import { useAuth } from '@/hooks/auth/use-auth';
-import { useLoading } from '@/hooks/layout/use-loading';
-import { useAlerts } from '@/hooks/layout/use-alerts';
-
-import { AlertPosition } from '@/types/layout/alert/alert-position';
-import { AlertStatus } from '@/types/layout/alert/alert-status';
-
-import { InputType } from '@/types/input/input-type';
-import type { ProfileResponse } from '@/types/api/responses/accounts/profile-response';
-import type { UpdateProfileRequest } from '@/types/api/requests/accounts/update-profile-request';
-import type { ProfileFieldKey, ProfileForm } from '@/types/profile/profile-form';
-
-import { authStore } from '@/shared/store/auth-store';
-import { routeNames } from '@/shared/constants/host-names';
+// Components
+import { AppShell, SettingsInputField, UiButton, UiPageHero } from '@/components';
+// Hooks
+import { useAccount, useAuth, useLoading, useAlerts } from '@/hooks';
+// Types
+import {
+  AlertPosition,
+  AlertStatus,
+  InputType,
+  type ProfileResponse,
+  type UpdateProfileRequest,
+  type ProfileFieldKey,
+  type ProfileForm,
+  UiButtonSize,
+  UiButtonVariant,
+} from '@/types';
+// Shared
+import { authStore, routeNames } from '@/shared';
 
 const PROFILE_FIELDS: ProfileFieldKey[] = [
   'username',
@@ -206,14 +205,11 @@ export const SettingsPage = () => {
     <AppShell>
       <main className="settings-page">
         <section className="settings-hero settings-hero--single">
-          <div className="settings-hero__content">
-            <div className="settings-hero__badge">
-              <SparkleRegular />
-              <span>Настройки профиля</span>
-            </div>
-
-            <h1 className="settings-hero__title">Настройте профиль</h1>
-          </div>
+          <UiPageHero
+            badgeIcon={<SparkleRegular />}
+            badge="Настройки профиля"
+            title="Настройте профиль"
+          />
         </section>
 
         <form className="settings-form-card settings-form-card--wide" onSubmit={handleSubmit}>
@@ -226,24 +222,27 @@ export const SettingsPage = () => {
             <div className="settings-card-header__actions">
               {hasChanges && <span className="settings-changes-count">{dirtyCount} измен.</span>}
 
-              <button
-                className="settings-button settings-button--light"
-                type="button"
+              <UiButton
+                title="Сбросить"
+                size={UiButtonSize.Medium}
                 disabled={!hasChanges || isBusy}
+                variant={UiButtonVariant.Light}
+                icon={<ArrowClockwiseRegular />}
                 onClick={resetForm}
               >
-                <ArrowClockwiseRegular />
-                <span>Сбросить</span>
-              </button>
+                Сбросить
+              </UiButton>
 
-              <button
-                className="settings-button settings-button--dark"
-                type="submit"
+              <UiButton
+                title="Сохранить"
+                size={UiButtonSize.Medium}
                 disabled={!hasChanges || isBusy}
+                type="submit"
+                variant={UiButtonVariant.Dark}
+                icon={<SaveRegular />}
               >
-                <SaveRegular />
-                <span>Сохранить</span>
-              </button>
+                Сохранить
+              </UiButton>
             </div>
           </div>
 

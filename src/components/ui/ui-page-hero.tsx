@@ -1,7 +1,7 @@
 // Types
 import type { ReactNode } from 'react';
 // Components
-import UiBadge from './ui-badge';
+import { UiBadge } from '@/components';
 
 type UiPageHeroProps = {
   badge: string;

@@ -1,204 +1,26 @@
+// Routing
 import { Link } from 'react-router-dom';
-
-import {
-  ArrowRightRegular,
-  CodeRegular,
-  CubeRegular,
-  DocumentRegular,
-  EditRegular,
-  LayerRegular,
-  SparkleRegular,
-} from '@fluentui/react-icons';
-
-import { routeNames } from '@/shared/constants/host-names';
-import { SiteShell, UiBadge } from '@/components';
+// Icons
+import { ArrowRightRegular, EditRegular } from '@fluentui/react-icons';
+// Shared
+import { geometryBlocks, workflowSteps, routeNames } from '@/shared';
+// Components
+import { SiteShell } from '@/components';
+import { LandingHeader, LandingHero, LandingShowcase, LandingFeatures } from '@/components/landing';
 
 const totalSdkDownloads = 4400;
-
-const features = [
-  {
-    title: '3D-редактор в браузере',
-    description:
-      'Создавайте и редактируйте сцены прямо в веб-интерфейсе без установки десктопных приложений.',
-    icon: <CubeRegular />,
-  },
-  {
-    title: 'Работа с проектами',
-    description: 'Сохраняйте сцены как проекты и возвращайтесь к ним из личного кабинета.',
-    icon: <LayerRegular />,
-  },
-  {
-    title: 'React SDK',
-    description: 'Подключайте редактор, canvas и хуки через собственные npm-пакеты Planara.',
-    icon: <CodeRegular />,
-  },
-];
-
-const geometryBlocks = [
-  {
-    eyebrow: 'Vertex editing',
-    title: 'Редактирование вершин',
-    description:
-      'Переключайтесь в режим вершин и точечно меняйте форму объекта. Такой подход позволяет работать не только с целой фигурой, но и с её геометрией.',
-    demoTitle: 'Vertex mode',
-    demoCaption: 'Выбор и трансформация отдельных точек',
-    reversed: false,
-  },
-  {
-    eyebrow: 'Edge editing',
-    title: 'Работа с рёбрами',
-    description:
-      'Выделяйте рёбра модели и изменяйте структуру объекта через режим edge-selection. Это делает редактор ближе к полноценным инструментам моделирования.',
-    demoTitle: 'Edge mode',
-    demoCaption: 'Редактирование связей между вершинами',
-    reversed: true,
-  },
-  {
-    eyebrow: 'Transform tools',
-    title: 'Translate, rotate и scale',
-    description:
-      'Для объектов и элементов геометрии доступны базовые инструменты трансформации: перемещение, вращение и масштабирование.',
-    demoTitle: 'Transform',
-    demoCaption: 'Инструменты управления формой и положением',
-    reversed: false,
-  },
-];
-
-const workflowSteps = [
-  {
-    title: 'Создайте проект',
-    description: 'Новый workspace создаётся из личного кабинета и сразу готов к работе.',
-  },
-  {
-    title: 'Откройте редактор',
-    description: 'Работайте с объектами, режимами выделения и инструментами трансформации.',
-  },
-  {
-    title: 'Сохраните сцену',
-    description: 'Файл проекта хранится на сервере и доступен при следующем открытии.',
-  },
-];
 
 export const LandingPage = () => {
   return (
     <SiteShell>
       <main className="landing-page">
-        <header className="landing-header">
-          <Link className="landing-header__brand" to="/">
-            <span className="landing-header__logo">P</span>
+        <LandingHeader />
 
-            <span className="landing-header__brand-text">
-              <span className="landing-header__brand-name">Planara</span>
-              <span className="landing-header__brand-caption">3D workspace</span>
-            </span>
-          </Link>
+        <LandingHero />
 
-          <nav className="landing-header__nav" aria-label="Главная навигация">
-            <a href="#editor">Редактор</a>
-            <a href="#geometry">Геометрия</a>
-            <a href="#sdk">SDK</a>
-          </nav>
+        <LandingShowcase />
 
-          <div className="landing-header__actions">
-            <Link className="landing-header__link" to={routeNames.LOGIN_PAGE}>
-              Войти
-            </Link>
-
-            <Link className="landing-header__button" to={routeNames.REGISTER_PAGE}>
-              Начать
-            </Link>
-          </div>
-        </header>
-
-        <section className="landing-hero">
-          <div className="landing-hero__content">
-            <UiBadge icon={<SparkleRegular />} className="landing-hero__badge">
-              Planara editor
-            </UiBadge>
-
-            <h1 className="landing-hero__title">Веб-редактор для работы с 3D-сценами</h1>
-
-            <p className="landing-hero__subtitle">
-              Planara объединяет личный кабинет, проекты, браузерный 3D-редактор и SDK-пакеты для
-              интеграции редактора в React-приложения.
-            </p>
-
-            <div className="landing-hero__actions">
-              <Link className="landing-button landing-button--dark" to={routeNames.REGISTER_PAGE}>
-                <span>Создать аккаунт</span>
-                <ArrowRightRegular />
-              </Link>
-
-              <Link className="landing-button landing-button--light" to="/sdk">
-                <DocumentRegular />
-                <span>Смотреть SDK</span>
-              </Link>
-            </div>
-          </div>
-        </section>
-
-        <section id="editor" className="landing-editor-showcase">
-          <div className="landing-editor-showcase__header">
-            <div>
-              <p className="landing-section__eyebrow">Editor preview</p>
-
-              <h2 className="landing-editor-showcase__title">
-                Полноценное рабочее пространство прямо в браузере
-              </h2>
-            </div>
-
-            <p className="landing-editor-showcase__text">
-              Здесь можно показать GIF с реальной работой редактора: создание объекта, переключение
-              режимов, выделение элементов и трансформации.
-            </p>
-          </div>
-
-          <div className="landing-editor-frame">
-            <div className="landing-editor-frame__topbar">
-              <div className="landing-editor-frame__dots">
-                <span />
-                <span />
-                <span />
-              </div>
-
-              <span>Planara workspace</span>
-            </div>
-
-            <div className="landing-editor-frame__body">
-              <video
-                className="landing-editor-frame__video"
-                src="/assets/editor-preview.mp4"
-                autoPlay
-                muted
-                loop
-                playsInline
-                preload="metadata"
-                poster="/assets/editor-preview-poster.png"
-              />
-            </div>
-          </div>
-        </section>
-
-        <section id="features" className="landing-section">
-          <div className="landing-section__header">
-            <div>
-              <p className="landing-section__eyebrow">Возможности</p>
-              <h2 className="landing-section__title">База для работы со сценами</h2>
-            </div>
-          </div>
-
-          <div className="landing-features">
-            {features.map((feature) => (
-              <article key={feature.title} className="landing-feature-card">
-                <div className="landing-feature-card__icon">{feature.icon}</div>
-
-                <h3 className="landing-feature-card__title">{feature.title}</h3>
-
-                <p className="landing-feature-card__description">{feature.description}</p>
-              </article>
-            ))}
-          </div>
-        </section>
+        <LandingFeatures />
 
         <section id="geometry" className="landing-geometry">
           <div className="landing-geometry__intro">

@@ -8,7 +8,8 @@ import {
 } from '@fluentui/react-icons';
 // Routing
 import { NavLink, useNavigate } from 'react-router-dom';
-import { routeNames } from '@/shared/constants/host-names';
+// Shared
+import { routeNames } from '@/shared';
 
 const navItems = [
   {

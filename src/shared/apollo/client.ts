@@ -8,10 +8,10 @@ import { authStore } from '@/shared/store/auth-store';
 // Services
 import { refreshAuthSession } from '@/shared/services/refresh-auth-session';
 
-const graphqlUrl = import.meta.env.VITE_GRAPHQL_URL;
+const graphqlUrl = import.meta.env.VITE_API_URL;
 
 if (!graphqlUrl) {
-  throw new Error('VITE_GRAPHQL_URL is not defined');
+  throw new Error('VITE_API_URL is not defined');
 }
 
 const TOKEN_EXPIRE_SKEW_MS = 30_000;
@@ -145,7 +145,7 @@ const authLink = new SetContextLink(async (prevContext) => {
 });
 
 const httpLink = new HttpLink({
-  uri: graphqlUrl,
+  uri: `${graphqlUrl}/api/`,
 });
 
 export const apolloClient = new ApolloClient({

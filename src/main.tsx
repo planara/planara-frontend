@@ -13,15 +13,16 @@ import { routeNames } from '@/shared/constants/host-names.ts';
 // Pages
 import EditorPage from '@/pages/editor';
 import RegisterPage from '@/pages/auth/register';
-import LoginPage from '@/pages/auth/login.tsx';
+import LoginPage from '@/pages/auth/login';
 import HomePage from '@/pages/home';
 import SettingsPage from '@/pages/settings';
 import ProjectsPage from '@/pages/projects';
 import SdkPage from '@/pages/sdk';
-import ServerErrorPage from '@/pages/error/erver-error-page.tsx';
-import NotFoundPage from '@/pages/error/not-found-page.tsx';
+import ServerErrorPage from '@/pages/error/server-error-page';
+import NotFoundPage from '@/pages/error/not-found-page';
 import LandingPage from '@/pages/landing';
-import SdkDocsPage from '@/pages/sdk/sdk-docs-page.tsx';
+import SdkDocsPage from '@/pages/sdk/sdk-docs-page';
+import CreateProjectPage from '@/pages/projects/create-project-page.tsx';
 // Apollo
 import { apolloClient } from '@/shared/apollo/client';
 import { ApolloProvider } from '@apollo/client/react';
@@ -31,10 +32,11 @@ import { useLoading } from '@/hooks/layout/use-loading.ts';
 import { LoadingProvider } from '@/shared/contexts/loading/loading-provider';
 // Alerts
 import Alert from '@/components/layout/alert.tsx';
-import type { AlertType } from '@/types/layout/alert/alert-type.ts';
-import { useAlerts } from '@/hooks/layout/use-alerts.ts';
-import { AlertProvider } from '@/shared/contexts/alert/alert-provider.tsx';
+import type { AlertType } from '@/types';
+import { useAlerts } from '@/hooks';
+import { AlertProvider } from '@/shared';
 import { PrivateRoute, PublicRoute } from '@/components';
+import ProjectPreviewPage from '@/pages/projects/project-preview-page.tsx';
 
 // App layout
 const App = () => {
@@ -71,6 +73,8 @@ const App = () => {
           <Route path={routeNames.SETTINGS_PAGE} element={<SettingsPage />} />
           <Route path={routeNames.PROJECTS_PAGE} element={<ProjectsPage />} />
           <Route path={routeNames.EDITOR_PAGE} element={<EditorPage />} />
+          <Route path={routeNames.CREATE_PROJECT_PAGE} element={<CreateProjectPage />} />
+          <Route path={routeNames.PROJECT_PAGE_PREVIEW} element={<ProjectPreviewPage />} />
         </Route>
         <Route element={<PublicRoute />}>
           <Route path={routeNames.REGISTER_PAGE} element={<RegisterPage />} />

@@ -2,8 +2,7 @@
 import type { ReactNode } from 'react';
 import { UiCardVariant, UiIconBoxVariant } from '@/types';
 // Components
-import UiCard from './ui-card';
-import UiIconBox from './ui-icon-box';
+import { UiCard, UiIconBox } from '@/components';
 
 type UiStatCardProps = {
   label: string;
