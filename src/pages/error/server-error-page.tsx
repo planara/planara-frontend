@@ -1,5 +1,6 @@
+// Icons
 import { DismissCircleRegular } from '@fluentui/react-icons';
-
+// Base page
 import ErrorPage from './error-page';
 
 export const ServerErrorPage = () => {

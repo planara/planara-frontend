@@ -1,9 +1,9 @@
 // Core
 import { useContext } from 'react';
 // Contexts
-import { LoadingContext } from '@/shared/contexts/loading/loading-context';
+import { LoadingContext } from '@/shared';
 // Types
-import type { LoadingContextType } from '@/types/contexts/loading-context-type';
+import type { LoadingContextType } from '@/types';
 
 /**
  * Хук для доступа к контексту загрузки.

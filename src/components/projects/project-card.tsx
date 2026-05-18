@@ -1,3 +1,4 @@
+// Icons
 import { ArrowRightRegular, CalendarRegular, DeleteRegular } from '@fluentui/react-icons';
 
 export type ProjectCardData = {

@@ -2,24 +2,21 @@
 import { type SubmitEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 // Hooks
-import { useAuth } from '@/hooks/auth/use-auth';
-import { useLoading } from '@/hooks/layout/use-loading';
-import { useAlerts } from '@/hooks/layout/use-alerts';
+import { useAuth, useLoading, useAlerts } from '@/hooks';
 // Components
-import UiInput from '@/components/input';
 import { Button, Link, Text, Title1 } from '@fluentui/react-components';
-import { AuthPagePreview } from '@/components/auth/auth-page-preview';
+import { AuthPagePreview, UiInput } from '@/components';
 // Types
-import { InputType } from '@/types/input/input-type';
-// Helpers
-import { validateEmail, validatePassword } from '@/shared/helpers/validators/auth-validator';
-import { clearError, triggerShake } from '@/shared/helpers/button-handlers/input-helpers';
-// Store
-import { authStore } from '@/shared/store/auth-store';
-// Constants
-import { routeNames } from '@/shared/constants/host-names';
-import { AlertStatus } from '@/types/layout/alert/alert-status';
-import { AlertPosition } from '@/types/layout/alert/alert-position';
+import { AlertStatus, AlertPosition, InputType } from '@/types';
+// Shared
+import {
+  authStore,
+  routeNames,
+  validateEmail,
+  validatePassword,
+  clearError,
+  triggerShake,
+} from '@/shared';
 
 export const LoginPage = () => {
   const [email, setEmail] = useState('');

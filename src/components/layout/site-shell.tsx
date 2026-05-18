@@ -1,7 +1,7 @@
 // Core
 import type { ReactNode } from 'react';
 // Components
-import { AppFooter } from '@/components/layout/app-footer';
+import { AppFooter } from '@/components';
 
 type SiteShellProps = {
   children: ReactNode;

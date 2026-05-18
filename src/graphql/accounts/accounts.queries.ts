@@ -1,7 +1,7 @@
 // Apollo
 import { gql } from '@apollo/client';
 // Types
-import type { ProfileResponse } from '@/types/api/responses/accounts/profile-response';
+import type { ProfileResponse } from '@/types';
 
 export type ProfileQueryData = {
   profile: ProfileResponse;

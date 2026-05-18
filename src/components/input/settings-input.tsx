@@ -1,9 +1,8 @@
 // Components
-import UiInput from '@/components/input';
+import { UiInput } from '@/components';
 // Types
 import type { ChangeEvent, ReactNode } from 'react';
-import { InputType } from '@/types/input/input-type';
-import type { ProfileFieldKey } from '@/types/profile/profile-form.ts';
+import { InputType, type ProfileFieldKey } from '@/types';
 
 type SettingsInputFieldProps = {
   field: ProfileFieldKey;

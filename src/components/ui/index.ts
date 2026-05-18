@@ -9,3 +9,6 @@ export { default as UiEmptyState } from './ui-empty-state';
 export { default as UiModal } from './ui-modal';
 export { default as UiLoader } from './ui-loader';
 export { default as UiSectionPanel } from './ui-section-panel';
+export { default as UiInput } from './ui-input';
+export { default as UiLoadMore } from './ui-load-more';
+export { default as UiViewer } from './ui-viewer';

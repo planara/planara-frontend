@@ -1,6 +1,8 @@
+// Core
 import { useMemo, useState } from 'react';
+// Routing
 import { useNavigate } from 'react-router-dom';
-
+// Icons
 import {
   AddRegular,
   ArrowRightRegular,
@@ -9,56 +11,17 @@ import {
   FolderRegular,
   SparkleRegular,
 } from '@fluentui/react-icons';
-
-import { AppShell } from '@/components/layout/app-shell';
-import UiModal from '@/components/ui/ui-modal.tsx';
-import CreateProjectModal from '@/components/projects/create-project-modal';
-
-import { useAlerts } from '@/hooks/layout/use-alerts';
-
-import { AlertPosition } from '@/types/layout/alert/alert-position';
-import { AlertStatus } from '@/types/layout/alert/alert-status';
-
-type ProjectResponse = {
-  id: string;
-  name: string;
-  description: string | null;
-  fileUrl: string;
-  createdAt: string;
-  updatedAt: string | null;
-};
+// Components
+import { AppShell, UiModal, CreateProjectModal, UiLoadMore, UiLoader } from '@/components';
+// Hooks
+import { useAlerts, useProjects } from '@/hooks';
+// Types
+import { AlertPosition, AlertStatus } from '@/types';
 
 type CreateProjectData = {
   name: string;
   description: string;
 };
-
-const mockProjects: ProjectResponse[] = [
-  {
-    id: '6a88c519-d442-42a4-8b6e-4f991ea04601',
-    name: 'Demo workspace',
-    description: 'Тестовый проект для проверки интерфейса редактора и базовых инструментов сцены.',
-    fileUrl: '/api/projects/6a88c519-d442-42a4-8b6e-4f991ea04601/file',
-    createdAt: '2026-04-18T12:30:00Z',
-    updatedAt: '2026-04-27T10:15:00Z',
-  },
-  {
-    id: '01a8c3ef-0f08-4c1d-9889-75b89f5d8a17',
-    name: 'Product scene',
-    description: 'Черновик сцены с материалами, освещением и несколькими объектами.',
-    fileUrl: '/api/projects/01a8c3ef-0f08-4c1d-9889-75b89f5d8a17/file',
-    createdAt: '2026-04-12T08:45:00Z',
-    updatedAt: '2026-04-26T18:20:00Z',
-  },
-  {
-    id: '32732d3b-c860-4a66-8144-69751b315b1a',
-    name: 'Landing preview',
-    description: 'Визуальная сцена для промо-страницы и презентации возможностей редактора.',
-    fileUrl: '/api/projects/32732d3b-c860-4a66-8144-69751b315b1a/file',
-    createdAt: '2026-04-03T16:10:00Z',
-    updatedAt: '2026-04-23T11:40:00Z',
-  },
-];
 
 const formatDate = (value: string | null) => {
   if (!value) {
@@ -72,20 +35,14 @@ const formatDate = (value: string | null) => {
   }).format(new Date(value));
 };
 
-const createProjectId = () => {
-  if ('crypto' in window && 'randomUUID' in window.crypto) {
-    return window.crypto.randomUUID();
-  }
-
-  return String(Date.now());
-};
-
 export const ProjectsPage = () => {
   const navigate = useNavigate();
 
   const { addAlert } = useAlerts();
 
-  const [projects, setProjects] = useState<ProjectResponse[]>(mockProjects);
+  const { projects, pageInfo, loading, error, loadingMore, loadMoreProjects, refetchProjects } =
+    useProjects();
+
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
   const lastUpdatedProject = useMemo(() => {
@@ -105,35 +62,45 @@ export const ProjectsPage = () => {
     setIsCreateModalOpen(false);
   };
 
-  const handleCreateProject = (data: CreateProjectData) => {
-    if (!data.name) {
+  const handleCreateProject = async (data: CreateProjectData) => {
+    if (!data.name.trim()) {
       addAlert('Введите название проекта', AlertStatus.Error, AlertPosition.TopRight);
       return;
     }
 
-    const id = createProjectId();
-    const now = new Date().toISOString();
+    /**
+     * TODO:
+     * Здесь лучше вызвать createProject mutation.
+     *
+     * await createProject({
+     *   name: data.name.trim(),
+     *   description: data.description.trim() || null,
+     * });
+     */
 
-    const nextProject: ProjectResponse = {
-      id,
-      name: data.name,
-      description: data.description || null,
-      fileUrl: `/api/projects/${id}/file`,
-      createdAt: now,
-      updatedAt: now,
-    };
-
-    setProjects((prev) => [nextProject, ...prev]);
     closeCreateModal();
+
+    await refetchProjects();
 
     addAlert('Проект создан', AlertStatus.Success, AlertPosition.TopRight);
   };
 
-  const handleDeleteProject = (projectId: string) => {
-    setProjects((prev) => prev.filter((project) => project.id !== projectId));
+  const handleDeleteProject = async (projectId: string) => {
+    /**
+     * TODO:
+     * Здесь лучше вызвать deleteProject mutation.
+     *
+     * await deleteProject(projectId);
+     */
+
+    console.log('delete project:', projectId);
+
+    await refetchProjects();
 
     addAlert('Проект удалён', AlertStatus.Success, AlertPosition.TopRight);
   };
+
+  const isInitialLoading = loading && projects.length === 0;
 
   return (
     <AppShell>
@@ -172,7 +139,7 @@ export const ProjectsPage = () => {
             </div>
 
             <div>
-              <p className="projects-stat__label">Всего проектов</p>
+              <p className="projects-stat__label">Всего загружено</p>
               <p className="projects-stat__value">{projects.length}</p>
             </div>
           </article>
@@ -207,64 +174,98 @@ export const ProjectsPage = () => {
             </button>
           </div>
 
-          {projects.length > 0 ? (
-            <div className="projects-grid">
-              {projects.map((project) => (
-                <article key={project.id} className="project-card">
-                  <div className="project-card__preview">
-                    <div className="project-card__grid" />
+          {isInitialLoading ? (
+            <div className="projects-state">
+              <UiLoader size="large" centered label="Загружаем проекты" />
+            </div>
+          ) : error ? (
+            <div className="projects-empty">
+              <div className="projects-empty__icon">
+                <FolderRegular />
+              </div>
 
-                    <div className="project-card__object">
-                      <div className="project-card__ring" />
-                      <div className="project-card__sphere" />
+              <h3 className="projects-empty__title">Не удалось загрузить проекты</h3>
+
+              <p className="projects-empty__text">
+                Проверьте подключение к серверу или попробуйте обновить страницу.
+              </p>
+
+              <button
+                className="projects-button projects-button--dark"
+                type="button"
+                onClick={() => refetchProjects()}
+              >
+                <span>Повторить</span>
+              </button>
+            </div>
+          ) : projects.length > 0 ? (
+            <>
+              <div className="projects-grid">
+                {projects.map((project) => (
+                  <article key={project.id} className="project-card">
+                    <div className="project-card__preview">
+                      <div className="project-card__grid" />
+
+                      <div className="project-card__object">
+                        <div className="project-card__ring" />
+                        <div className="project-card__sphere" />
+                      </div>
                     </div>
-                  </div>
 
-                  <div className="project-card__body">
-                    <div className="project-card__top">
-                      <div className="project-card__content">
-                        <h3 className="project-card__title">{project.name}</h3>
+                    <div className="project-card__body">
+                      <div className="project-card__top">
+                        <div className="project-card__content">
+                          <h3 className="project-card__title">{project.name}</h3>
 
-                        <p className="project-card__description">
-                          {project.description || 'Описание проекта пока не добавлено.'}
-                        </p>
+                          <p className="project-card__description">
+                            {project.description || 'Описание проекта пока не добавлено.'}
+                          </p>
+                        </div>
+
+                        <button
+                          className="project-card__delete"
+                          type="button"
+                          aria-label="Удалить проект"
+                          onClick={() => handleDeleteProject(project.id)}
+                        >
+                          <DeleteRegular />
+                        </button>
                       </div>
 
-                      <button
-                        className="project-card__delete"
-                        type="button"
-                        aria-label="Удалить проект"
-                        onClick={() => handleDeleteProject(project.id)}
-                      >
-                        <DeleteRegular />
-                      </button>
-                    </div>
+                      <div className="project-card__meta">
+                        <span>
+                          <CalendarRegular />
+                          Создан: {formatDate(project.createdAt)}
+                        </span>
+                      </div>
 
-                    <div className="project-card__meta">
-                      <span>
-                        <CalendarRegular />
-                        Создан: {formatDate(project.createdAt)}
-                      </span>
-                    </div>
+                      <div className="project-card__footer">
+                        <span className="project-card__updated">
+                          Обновлен: {formatDate(project.updatedAt)}
+                        </span>
 
-                    <div className="project-card__footer">
-                      <span className="project-card__updated">
-                        Обновлен: {formatDate(project.updatedAt)}
-                      </span>
-
-                      <button
-                        className="project-card__open"
-                        type="button"
-                        onClick={() => navigate(`/projects/${project.id}`)}
-                      >
-                        <span>Открыть</span>
-                        <ArrowRightRegular />
-                      </button>
+                        <button
+                          className="project-card__open"
+                          type="button"
+                          onClick={() => navigate(`/projects/${project.id}`)}
+                        >
+                          <span>Открыть</span>
+                          <ArrowRightRegular />
+                        </button>
+                      </div>
                     </div>
-                  </div>
-                </article>
-              ))}
-            </div>
+                  </article>
+                ))}
+              </div>
+
+              <UiLoadMore
+                hasNextPage={pageInfo?.hasNextPage}
+                loading={loadingMore}
+                onLoadMore={loadMoreProjects}
+                label="Загрузить ещё"
+                endLabel="Все проекты загружены"
+              />
+            </>
           ) : (
             <div className="projects-empty">
               <div className="projects-empty__icon">

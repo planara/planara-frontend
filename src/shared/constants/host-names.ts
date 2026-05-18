@@ -16,11 +16,17 @@ export const routeNames = {
   /** Страница регистрации */
   REGISTER_PAGE: '/register',
 
-  /** Страница редактора */
-  EDITOR_PAGE: '/projects/:projectId',
-
   /** Страница проектов */
   PROJECTS_PAGE: '/projects',
+
+  /** Страница предпросмотра проекта */
+  PROJECT_PAGE_PREVIEW: '/projects/:projectId',
+
+  /** Страница создания проекта */
+  CREATE_PROJECT_PAGE: '/projects/create',
+
+  /** Страница редактора */
+  EDITOR_PAGE: '/projects/:projectId/edit',
 
   /** Страница настроек */
   SETTINGS_PAGE: '/settings',

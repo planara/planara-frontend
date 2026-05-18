@@ -1,17 +1,24 @@
+// Core
 import { useState } from 'react';
-
+// Components
+import { EditorToolbar, FigureStats } from '@/components';
+// Icons
 import { DesktopRegular, ArrowLeftRegular } from '@fluentui/react-icons';
-
 // Editor
 import { EditorCanvas, EditorProvider } from '@planara/react';
-// Components
-import EditorToolbar from '@/components/editor/editor-toolbar';
-import FigureStats from '@/components/editor/figure-stats';
-
-import { routeNames } from '@/shared/constants/host-names';
+// Shared
+import { routeNames } from '@/shared';
+// Types
+import type { RendererConfigInput } from '@planara/types';
 
 export const EditorPage = () => {
   const [statsOpen, setStatsOpen] = useState(true);
+
+  const config: RendererConfigInput = {
+    background: {
+      color: '#111111',
+    },
+  };
 
   const toggleStats = () => {
     setStatsOpen((prev) => !prev);
@@ -53,7 +60,7 @@ export const EditorPage = () => {
 
           <section className="editor-page__body">
             <div className="editor-renderer">
-              <EditorCanvas className="editor-renderer__canvas" />
+              <EditorCanvas className="editor-renderer__canvas" config={config} />
               <FigureStats open={statsOpen} onClose={toggleStats} />
             </div>
           </section>

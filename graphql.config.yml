@@ -1,2 +1,2 @@
-schema: http://localhost:5000/planara/api/
+schema: http://localhost:5000/api/
 documents: '**/*.graphql'

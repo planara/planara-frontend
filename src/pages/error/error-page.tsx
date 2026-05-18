@@ -1,10 +1,13 @@
+// Core
 import type { ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
-
+// Icons
 import { ArrowLeftRegular, HomeRegular } from '@fluentui/react-icons';
-
+// Components
 import { SiteShell, UiButton } from '@/components';
+// Shared
 import { routeNames } from '@/shared';
+// Types
 import { UiButtonSize, UiButtonVariant } from '@/types';
 
 type ErrorPageProps = {

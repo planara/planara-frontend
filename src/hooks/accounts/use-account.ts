@@ -9,7 +9,7 @@ import {
   type UpdateProfileMutationVariables,
 } from '@/graphql/accounts';
 // Types
-import type { UpdateProfileRequest } from '@/types/api/requests/accounts/update-profile-request';
+import type { UpdateProfileRequest } from '@/types';
 
 export const useAccount = () => {
   const { data, loading, error, refetch } = useQuery<ProfileQueryData>(PROFILE_QUERY, {

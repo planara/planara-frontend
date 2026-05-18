@@ -1,13 +1,14 @@
 // Apollo
 import { gql } from '@apollo/client';
-// Requests
-import type { RegisterRequest } from '@/types/api/requests/auth/register-request';
-import type { RefreshRequest } from '@/types/api/requests/auth/refresh-request';
-import type { LoginRequest } from '@/types/api/requests/auth/login-request';
-import type { LogoutRequest } from '@/types/api/requests/auth/logout-request';
-// Responses
-import type { AuthResponse } from '@/types/api/responses/auth/auth-response';
-import type { LogoutResponse } from '@/types/api/responses/accounts/logout-response';
+// Types
+import type {
+  RegisterRequest,
+  RefreshRequest,
+  LoginRequest,
+  LogoutRequest,
+  AuthResponse,
+  LogoutResponse,
+} from '@/types';
 
 export type RegisterMutationData = {
   register: AuthResponse;

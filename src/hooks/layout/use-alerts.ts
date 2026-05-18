@@ -1,9 +1,9 @@
 // Core
 import { useContext } from 'react';
 // Contexts
-import { AlertContext } from '@/shared/contexts/alert/alert-context';
+import { AlertContext } from '@/shared';
 // Types
-import type { AlertContextType } from '@/types/contexts/alert-context-type';
+import type { AlertContextType } from '@/types';
 
 /**
  * Хук для доступа к контексту уведомлений.

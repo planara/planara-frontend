@@ -1,6 +1,6 @@
 // Apollo
 import { useMutation } from '@apollo/client/react';
-// Mutations
+// Queries / Mutations
 import {
   LOGIN_MUTATION,
   REGISTER_MUTATION,
@@ -12,10 +12,8 @@ import {
   type LogoutMutationData,
   type LogoutMutationVariables,
 } from '@/graphql/auth';
-// Requests
-import type { RegisterRequest } from '@/types/api/requests/auth/register-request';
-import type { LoginRequest } from '@/types/api/requests/auth/login-request';
-import type { LogoutRequest } from '@/types/api/requests/auth/logout-request.ts';
+// Types
+import type { RegisterRequest, LoginRequest, LogoutRequest } from '@/types';
 
 export const useAuth = () => {
   const [registerMutation, registerState] = useMutation<
@@ -27,7 +25,6 @@ export const useAuth = () => {
     LOGIN_MUTATION,
   );
 
-  // внутри useAuth
   const [logoutMutation] = useMutation<LogoutMutationData, LogoutMutationVariables>(
     LOGOUT_MUTATION,
   );

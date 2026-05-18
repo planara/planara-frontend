@@ -1,5 +1,6 @@
+// Icons
 import { DismissRegular } from '@fluentui/react-icons';
-
+// Editor
 import { useSelectionStats } from '@planara/react';
 
 type FigureStatsProps = {
