@@ -6,7 +6,7 @@ import { routeNames } from '@/shared';
 const LandingHeader = () => {
   return (
     <header className="landing-header">
-      <Link className="landing-header__brand" to="/">
+      <Link className="landing-header__brand" to={routeNames.LANDING_PAGE}>
         <span className="landing-header__logo">P</span>
 
         <span className="landing-header__brand-text">

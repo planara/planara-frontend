@@ -1,5 +1,9 @@
 // Shared
 import { features } from '@/shared';
+// Components
+import { UiIconBox } from '@/components';
+// Types
+import { UiIconBoxVariant } from '@/types';
 
 const LandingFeatures = () => {
   return (
@@ -14,7 +18,7 @@ const LandingFeatures = () => {
       <div className="landing-features">
         {features.map((feature) => (
           <article key={feature.title} className="landing-feature-card">
-            <div className="landing-feature-card__icon">{feature.icon}</div>
+            <UiIconBox icon={feature.icon} variant={UiIconBoxVariant.Dark} />
 
             <h3 className="landing-feature-card__title">{feature.title}</h3>
 

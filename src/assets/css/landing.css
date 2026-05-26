@@ -729,6 +729,9 @@
   gap: 8px;
   background: rgba(255, 255, 255, 0.09);
   color: rgba(255, 255, 255, 0.78);
+  span {
+    color: rgba(255, 255, 255, 0.78);
+  }
   backdrop-filter: blur(18px);
   font-size: 11px;
   font-weight: 900;

@@ -20,7 +20,7 @@ export const routeNames = {
   PROJECTS_PAGE: '/projects',
 
   /** Страница предпросмотра проекта */
-  PROJECT_PAGE_PREVIEW: '/projects/:projectId',
+  PROJECT_PAGE_PREVIEW: '/projects/:projectId/preview',
 
   /** Страница создания проекта */
   CREATE_PROJECT_PAGE: '/projects/create',
@@ -40,4 +40,10 @@ export const routeNames = {
   /** Страница документации sdk */
   SDK_DOCS_PAGE: '/sdk/:packageSlug/docs',
   SDK_DOCS_PAGE_DEEP: '/sdk/:packageSlug/docs/:sectionSlug',
+
+  /** Страница бенчмарка */
+  BENCHMARK_RUNS_PAGE: '/benchmark',
+  CREATE_BENCHMARK_RUN_PAGE: '/benchmark/create',
+  BENCHMARK_EXECUTION_PAGE: '/benchmark/run',
+  BENCHMARK_RUN_PAGE: '/benchmark/:runId',
 };

@@ -6,3 +6,4 @@ export * from './http';
 export * from './services';
 export * from './store';
 export * from './theme';
+export * from './benchmark';
