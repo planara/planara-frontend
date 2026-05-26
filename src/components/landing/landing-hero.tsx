@@ -28,7 +28,7 @@ const LandingHero = () => {
             <ArrowRightRegular />
           </Link>
 
-          <Link className="landing-button landing-button--light" to="/sdk">
+          <Link className="landing-button landing-button--light" to={routeNames.SDK_PAGE}>
             <DocumentRegular />
             <span>Смотреть SDK</span>
           </Link>

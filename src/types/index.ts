@@ -6,3 +6,4 @@ export * from './layout';
 export * from './profile';
 export * from './sdk';
 export * from './store';
+export * from './benchmark';

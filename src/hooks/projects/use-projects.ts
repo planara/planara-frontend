@@ -24,7 +24,7 @@ import type { CreateProjectRequest, DeleteProjectRequest, UpdateProjectRequest }
 
 const PROJECTS_PAGE_SIZE = 20;
 
-export const useProjects = (projectId?: string) => {
+export const useProjects = (projectId?: string, first = PROJECTS_PAGE_SIZE) => {
   const [loadingMore, setLoadingMore] = useState(false);
 
   const {
@@ -35,7 +35,7 @@ export const useProjects = (projectId?: string) => {
     fetchMore,
   } = useQuery<ProjectsQueryData, ProjectsQueryVariables>(PROJECTS_QUERY, {
     variables: {
-      first: PROJECTS_PAGE_SIZE,
+      first,
       after: null,
     },
     fetchPolicy: 'cache-and-network',
@@ -115,7 +115,7 @@ export const useProjects = (projectId?: string) => {
 
       await fetchMore({
         variables: {
-          first: PROJECTS_PAGE_SIZE,
+          first,
           after: pageInfo.endCursor,
         },
         updateQuery: (previousResult, { fetchMoreResult }) => {
@@ -142,6 +142,7 @@ export const useProjects = (projectId?: string) => {
   return {
     projects: projectsData?.myProjects.nodes ?? [],
     pageInfo: projectsData?.myProjects.pageInfo,
+    totalCount: projectsData?.myProjects.totalCount ?? 0,
 
     project: projectData?.project,
 

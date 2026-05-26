@@ -23,6 +23,11 @@ import NotFoundPage from '@/pages/error/not-found-page';
 import LandingPage from '@/pages/landing';
 import SdkDocsPage from '@/pages/sdk/sdk-docs-page';
 import CreateProjectPage from '@/pages/projects/create-project-page.tsx';
+import ProjectPreviewPage from '@/pages/projects/project-preview-page.tsx';
+import BenchmarkRunPage from '@/pages/benchmark/benchmark-run-page.tsx';
+import BenchmarkExecutionPage from '@/pages/benchmark/benchmark-execution-page.tsx';
+import CreateBenchmarkRunPage from '@/pages/benchmark/create-benchmark-run-page.tsx';
+import BenchmarkRunsPage from '@/pages/benchmark/benchmark-runs-page.tsx';
 // Apollo
 import { apolloClient } from '@/shared/apollo/client';
 import { ApolloProvider } from '@apollo/client/react';
@@ -36,7 +41,6 @@ import type { AlertType } from '@/types';
 import { useAlerts } from '@/hooks';
 import { AlertProvider } from '@/shared';
 import { PrivateRoute, PublicRoute } from '@/components';
-import ProjectPreviewPage from '@/pages/projects/project-preview-page.tsx';
 
 // App layout
 const App = () => {
@@ -75,6 +79,10 @@ const App = () => {
           <Route path={routeNames.EDITOR_PAGE} element={<EditorPage />} />
           <Route path={routeNames.CREATE_PROJECT_PAGE} element={<CreateProjectPage />} />
           <Route path={routeNames.PROJECT_PAGE_PREVIEW} element={<ProjectPreviewPage />} />
+          <Route path="/benchmark" element={<BenchmarkRunsPage />} />
+          <Route path="/benchmark/create" element={<CreateBenchmarkRunPage />} />
+          <Route path="/benchmark/run" element={<BenchmarkExecutionPage />} />
+          <Route path="/benchmark/:runId" element={<BenchmarkRunPage />} />
         </Route>
         <Route element={<PublicRoute />}>
           <Route path={routeNames.REGISTER_PAGE} element={<RegisterPage />} />

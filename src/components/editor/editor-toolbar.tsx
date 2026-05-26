@@ -1,7 +1,7 @@
 // Core
 import { type ChangeEvent, useMemo, useRef } from 'react';
 // Routing
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 // Icons
 import {
   AddRegular,
@@ -25,19 +25,54 @@ import {
 } from '@fluentui/react-components';
 // Editor
 import { makeEditorHandlers, useEditorHub } from '@planara/react';
-// Shared
-import { routeNames } from '@/shared';
+// Components
+import { UiLoader } from '@/components';
+
+export type EditorSaveStatus = 'idle' | 'saving' | 'saved' | 'error';
 
 type EditorToolbarProps = {
   statsOpen: boolean;
+  saveStatus: EditorSaveStatus;
+  lastSavedAt: number | null;
   onToggleStats: () => void;
+  onSaveProject: () => void | Promise<void>;
+  onLeaveEditor: () => void | Promise<void>;
 };
 
-export const EditorToolbar = ({ statsOpen, onToggleStats }: EditorToolbarProps) => {
-  const navigate = useNavigate();
+const formatSaveTime = (value: number | null) => {
+  if (!value) {
+    return '';
+  }
 
+  return new Intl.DateTimeFormat('ru-RU', {
+    hour: '2-digit',
+    minute: '2-digit',
+  }).format(new Date(value));
+};
+
+const getSaveStatusText = (status: EditorSaveStatus, lastSavedAt: number | null) => {
+  if (status === 'saved') {
+    return `Сохранено ${formatSaveTime(lastSavedAt)}`;
+  }
+
+  if (status === 'error') {
+    return 'Ошибка сохранения';
+  }
+
+  return 'Автосохранение включено';
+};
+
+export const EditorToolbar = ({
+  statsOpen,
+  saveStatus,
+  lastSavedAt,
+  onToggleStats,
+  onSaveProject,
+  onLeaveEditor,
+}: EditorToolbarProps) => {
   const hub = useEditorHub();
   const handlers = useMemo(() => makeEditorHandlers(hub), [hub]);
+
   const { projectId } = useParams<{ projectId: string }>();
 
   const sceneInputRef = useRef<HTMLInputElement>(null);
@@ -46,7 +81,7 @@ export const EditorToolbar = ({ statsOpen, onToggleStats }: EditorToolbarProps) 
   const getExportFilename = (sourceFilename?: string) => {
     const extension = sourceFilename?.includes('.')
       ? sourceFilename.slice(sourceFilename.lastIndexOf('.'))
-      : '.json';
+      : '.obj';
 
     return `project-${projectId ?? 'untitled'}${extension}`;
   };
@@ -125,11 +160,7 @@ export const EditorToolbar = ({ statsOpen, onToggleStats }: EditorToolbarProps) 
   return (
     <header className="editor-toolbar">
       <div className="editor-toolbar__left">
-        <button
-          className="editor-toolbar__back"
-          type="button"
-          onClick={() => navigate(routeNames.PROJECTS_PAGE)}
-        >
+        <button className="editor-toolbar__back" type="button" onClick={() => void onLeaveEditor()}>
           <ArrowLeftRegular />
         </button>
 
@@ -260,6 +291,19 @@ export const EditorToolbar = ({ statsOpen, onToggleStats }: EditorToolbarProps) 
       </nav>
 
       <div className="editor-toolbar__right">
+        <div
+          className={[
+            'editor-toolbar__save-status',
+            `editor-toolbar__save-status--${saveStatus}`,
+          ].join(' ')}
+        >
+          {saveStatus === 'saving' ? (
+            <UiLoader />
+          ) : (
+            <span>{getSaveStatusText(saveStatus, lastSavedAt)}</span>
+          )}
+        </div>
+
         <button className="editor-toolbar__danger" type="button" onClick={handlers.deleteFigure}>
           <DeleteRegular />
           <span>Удалить</span>
@@ -277,6 +321,8 @@ export const EditorToolbar = ({ statsOpen, onToggleStats }: EditorToolbarProps) 
               <MenuItem onClick={() => modelInputRef.current?.click()}>Загрузить модель</MenuItem>
 
               <MenuItem onClick={() => sceneInputRef.current?.click()}>Загрузить сцену</MenuItem>
+
+              <MenuItem onClick={() => void onSaveProject()}>Сохранить проект</MenuItem>
 
               <MenuItem onClick={handleExportProject}>Экспортировать проект</MenuItem>
             </MenuList>

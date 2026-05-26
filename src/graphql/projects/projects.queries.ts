@@ -5,6 +5,7 @@ import type { PageInfo, ProjectResponse } from '@/types';
 
 export type ProjectsQueryData = {
   myProjects: {
+    totalCount: number;
     nodes: ProjectResponse[];
     pageInfo: PageInfo;
   };
@@ -44,6 +45,7 @@ export const PROJECT_QUERY = gql`
 export const PROJECTS_QUERY = gql`
   query MyProjects($first: Int, $after: String) {
     myProjects(first: $first, after: $after) {
+      totalCount
       nodes {
         id
         name

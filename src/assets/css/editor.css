@@ -689,3 +689,44 @@
     width: 100%;
   }
 }
+
+.editor-toolbar__save-status {
+  min-height: 34px;
+  padding: 0 11px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.66);
+  font-size: 11px;
+  font-weight: 850;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.editor-toolbar__save-status--saved {
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.editor-toolbar__save-status--saving {
+  min-width: 34px;
+  color: #ffffff;
+}
+
+.editor-toolbar__save-status--error {
+  color: #ffb3b3;
+}
+
+.editor-toolbar__save-status .ui-loader {
+  transform: scale(0.72);
+  transform-origin: center;
+}
+
+@media (max-width: 1280px) {
+  .editor-toolbar__save-status {
+    display: none;
+  }
+}
