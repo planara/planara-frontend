@@ -1,22 +1,28 @@
+// Core
 import { useState } from 'react';
+// Routing
 import { useNavigate } from 'react-router-dom';
-
+// Icons
 import {
   ArrowLeftRegular,
   BeakerRegular,
-  ChartMultipleRegular,
   PlayRegular,
   SparkleRegular,
 } from '@fluentui/react-icons';
-
+// Types
 import { BenchmarkTestType } from '@planara/types';
-
-import { AppShell, UiPageHero } from '@/components';
-
+import {
+  AlertPosition,
+  AlertStatus,
+  UiButtonSize,
+  UiButtonVariant,
+  UiIconBoxVariant,
+} from '@/types';
+// Components
+import { AppShell, UiButton, UiIconBox, UiPageHero, BenchmarkAboutMetrics } from '@/components';
+// Hooks
 import { useAlerts } from '@/hooks';
-
-import { AlertPosition, AlertStatus } from '@/types';
-
+// Shared
 import {
   benchmarkTests,
   createBenchmarkRunUrl,
@@ -75,21 +81,22 @@ export const CreateBenchmarkRunPage = () => {
     <AppShell>
       <main className="benchmark-create-page">
         <section className="benchmark-create-hero">
-          <button
-            className="benchmark-create-back"
-            type="button"
+          <UiButton
+            title="Запуски"
+            size={UiButtonSize.Medium}
+            variant={UiButtonVariant.Light}
+            icon={<ArrowLeftRegular />}
             onClick={() => navigate(routeNames.BENCHMARK_RUNS_PAGE)}
           >
-            <ArrowLeftRegular />
-            <span>Запуски</span>
-          </button>
+            Запуски
+          </UiButton>
 
           <UiPageHero
             badgeIcon={<SparkleRegular />}
             badge="Новый бенчмарк"
             title="Создание запуска тестирования"
             subtitle="Выберите один или несколько сценариев нагрузки, задайте длительность и перейдите в отдельный режим выполнения тестов."
-          />
+          ></UiPageHero>
         </section>
 
         <section className="benchmark-create-layout">
@@ -129,30 +136,22 @@ export const CreateBenchmarkRunPage = () => {
             </div>
 
             <div className="benchmark-create-card__actions">
-              <button
-                className="benchmark-create-button benchmark-create-button--light"
-                type="button"
-                onClick={selectAllTests}
-              >
+              <UiButton type="button" onClick={selectAllTests} variant={UiButtonVariant.Light}>
                 Выбрать все
-              </button>
+              </UiButton>
 
-              <button
-                className="benchmark-create-button benchmark-create-button--light"
-                type="button"
-                onClick={resetSelection}
-              >
+              <UiButton type="button" onClick={resetSelection} variant={UiButtonVariant.Light}>
                 Снять выбор
-              </button>
+              </UiButton>
 
-              <button
-                className="benchmark-create-button benchmark-create-button--dark"
+              <UiButton
+                icon={<PlayRegular />}
                 type="button"
                 onClick={startBenchmark}
+                variant={UiButtonVariant.Dark}
               >
-                <PlayRegular />
-                <span>Запустить тестирование</span>
-              </button>
+                Запустить тестирование
+              </UiButton>
             </div>
           </section>
 
@@ -164,9 +163,7 @@ export const CreateBenchmarkRunPage = () => {
                   <h2 className="benchmark-create-card__title">Длительность</h2>
                 </div>
 
-                <div className="benchmark-create-card__icon">
-                  <BeakerRegular />
-                </div>
+                <UiIconBox icon={<BeakerRegular />} variant={UiIconBoxVariant.Dark} />
               </div>
 
               <label className="benchmark-create-duration">
@@ -184,26 +181,7 @@ export const CreateBenchmarkRunPage = () => {
               </label>
             </section>
 
-            <section className="benchmark-create-card benchmark-create-card--dark">
-              <div className="benchmark-create-card__header">
-                <div>
-                  <p className="benchmark-create-section__eyebrow">Что будет измерено</p>
-                  <h2 className="benchmark-create-card__title">Метрики</h2>
-                </div>
-
-                <div className="benchmark-create-card__icon">
-                  <ChartMultipleRegular />
-                </div>
-              </div>
-
-              <div className="benchmark-create-metrics-list">
-                <span>Средний и минимальный FPS</span>
-                <span>Среднее и максимальное время кадра</span>
-                <span>Количество объектов, draw calls и треугольников</span>
-                <span>Геометрии, текстуры и память браузера</span>
-                <span>История значений для построения графиков</span>
-              </div>
-            </section>
+            <BenchmarkAboutMetrics />
           </aside>
         </section>
       </main>

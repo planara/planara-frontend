@@ -78,6 +78,10 @@
   border-color: #a32121;
   color: #ffffff;
   box-shadow: 0 18px 44px rgba(163, 33, 33, 0.16);
+
+  span {
+    color: #ffffff;
+  }
 }
 
 /* Runs page */
@@ -419,6 +423,9 @@
   font-size: 12px;
   font-weight: 900;
   cursor: pointer;
+  span {
+    color: #ffffff;
+  }
 }
 
 .benchmark-run-card__open svg {

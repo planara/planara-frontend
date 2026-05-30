@@ -1,5 +1,6 @@
 // Components
 import {
+  BeakerRegular,
   BoxRegular,
   FolderRegular,
   HomeRegular,
@@ -21,6 +22,11 @@ const navItems = [
     title: 'Проекты',
     path: routeNames.PROJECTS_PAGE,
     icon: <FolderRegular />,
+  },
+  {
+    title: 'Бенчмарк',
+    path: routeNames.BENCHMARK_RUNS_PAGE,
+    icon: <BeakerRegular />,
   },
   {
     title: 'Настройки',

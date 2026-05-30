@@ -1,31 +1,13 @@
 // Icons
 import { ArrowRightRegular, CalendarRegular, DeleteRegular } from '@fluentui/react-icons';
-
-export type ProjectCardData = {
-  id: string;
-  name: string;
-  description: string | null;
-  fileUrl: string;
-  createdAt: string;
-  updatedAt: string | null;
-};
+// Shared
+import { formatDate } from '@/shared';
+import type { ProjectResponse } from '@/types';
 
 type ProjectCardProps = {
-  project: ProjectCardData;
+  project: ProjectResponse;
   onOpen: (projectId: string) => void;
   onDelete: (projectId: string) => void;
-};
-
-const formatDate = (value: string | null) => {
-  if (!value) {
-    return 'Не обновлялся';
-  }
-
-  return new Intl.DateTimeFormat('ru-RU', {
-    day: '2-digit',
-    month: 'short',
-    year: 'numeric',
-  }).format(new Date(value));
 };
 
 export const ProjectCard = ({ project, onOpen, onDelete }: ProjectCardProps) => {
@@ -35,7 +17,6 @@ export const ProjectCard = ({ project, onOpen, onDelete }: ProjectCardProps) => 
         <div className="project-card__grid" />
 
         <div className="project-card__object">
-          <div className="project-card__ring" />
           <div className="project-card__sphere" />
         </div>
       </div>
