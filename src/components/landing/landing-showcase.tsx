@@ -5,9 +5,7 @@ const LandingShowcase = () => {
         <div>
           <p className="landing-section__eyebrow">Превью редактора</p>
 
-          <h2 className="landing-editor-showcase__title">
-            Рабочая сцена прямо в браузере
-          </h2>
+          <h2 className="landing-editor-showcase__title">Рабочая сцена прямо в браузере</h2>
         </div>
       </div>
 
