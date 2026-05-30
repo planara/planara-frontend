@@ -3,10 +3,10 @@ const LandingShowcase = () => {
     <section id="editor" className="landing-editor-showcase">
       <div className="landing-editor-showcase__header">
         <div>
-          <p className="landing-section__eyebrow">Editor preview</p>
+          <p className="landing-section__eyebrow">Превью редактора</p>
 
           <h2 className="landing-editor-showcase__title">
-            Полноценное рабочее пространство прямо в браузере
+            Рабочая сцена прямо в браузере
           </h2>
         </div>
       </div>
@@ -19,7 +19,7 @@ const LandingShowcase = () => {
             <span />
           </div>
 
-          <span>Planara workspace</span>
+          <span>Рабочее пространство</span>
         </div>
 
         <div className="landing-editor-frame__body">

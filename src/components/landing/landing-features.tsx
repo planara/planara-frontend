@@ -11,7 +11,7 @@ const LandingFeatures = () => {
       <div className="landing-section__header">
         <div>
           <p className="landing-section__eyebrow">Возможности</p>
-          <h2 className="landing-section__title">База для работы со сценами</h2>
+          <h2 className="landing-section__title">Всё нужное для работы с 3D-сценами</h2>
         </div>
       </div>
 
