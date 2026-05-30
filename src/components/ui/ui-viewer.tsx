@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef } from 'react';
 
-import { ViewerCanvas, ViewerProvider, useViewerHub } from '@planara/react';
+import { useViewerHub, ViewerCanvas, ViewerProvider } from '@planara/react';
 
 import { FigureType, type RendererConfigInput } from '@planara/types';
 
@@ -32,6 +32,7 @@ type UiViewerProps = {
   source?: UiViewerSource | null;
   loadMode?: UiViewerLoadMode;
   defaultFigure?: FigureType | null;
+  showDefaultFigure?: boolean;
   className?: string;
 };
 
@@ -112,21 +113,20 @@ const UiViewerContent = ({
   source,
   sourceKey,
   loadMode = 'auto',
-  defaultFigure = FigureType.Cube,
+  defaultFigure = null,
+  showDefaultFigure = false,
 }: UiViewerContentProps) => {
   const hub = useViewerHub();
 
   const { startLoading, stopLoading } = useLoading();
   const { addAlert } = useAlerts();
 
-  const sourceRef = useRef<UiViewerSource | null | undefined>(source);
   const startLoadingRef = useRef(startLoading);
   const stopLoadingRef = useRef(stopLoading);
   const addAlertRef = useRef(addAlert);
 
-  useEffect(() => {
-    sourceRef.current = source;
-  }, [source]);
+  const loadedKeyRef = useRef<string | null>(null);
+  const loadingKeyRef = useRef<string | null>(null);
 
   useEffect(() => {
     startLoadingRef.current = startLoading;
@@ -139,19 +139,62 @@ const UiViewerContent = ({
       return;
     }
 
+    let firstFrameId = 0;
+    let secondFrameId = 0;
+
+    firstFrameId = requestAnimationFrame(() => {
+      hub.resizeRenderer();
+
+      secondFrameId = requestAnimationFrame(() => {
+        hub.resizeRenderer();
+      });
+    });
+
+    return () => {
+      cancelAnimationFrame(firstFrameId);
+      cancelAnimationFrame(secondFrameId);
+    };
+  }, [hub]);
+
+  useEffect(() => {
+    if (!hub) {
+      return;
+    }
+
+    const loadKey = source ? sourceKey : `default-${String(defaultFigure)}`;
+
+    if (loadedKeyRef.current === loadKey || loadingKeyRef.current === loadKey) {
+      return;
+    }
+
+    if (!source && (!showDefaultFigure || !defaultFigure)) {
+      return;
+    }
+
     let cancelled = false;
     let loadingStarted = false;
+    let resizeFrameId = 0;
+
+    const resizeViewer = () => {
+      hub.resizeRenderer();
+
+      resizeFrameId = requestAnimationFrame(() => {
+        hub.resizeRenderer();
+      });
+    };
 
     const loadViewer = async () => {
-      const currentSource = sourceRef.current;
-
       try {
-        if (!currentSource) {
-          if (defaultFigure) {
-            const response = hub.addFigure(defaultFigure);
+        loadingKeyRef.current = loadKey;
 
-            console.log('viewer default figure response:', response);
-          }
+        if (!source) {
+          const response = hub.addFigure(defaultFigure ?? FigureType.Cube);
+
+          resizeViewer();
+
+          loadedKeyRef.current = loadKey;
+
+          console.log('viewer default figure response:', response);
 
           return;
         }
@@ -159,15 +202,19 @@ const UiViewerContent = ({
         loadingStarted = true;
         startLoadingRef.current();
 
-        const content = await readSourceContent(currentSource);
+        const content = await readSourceContent(source);
 
         if (cancelled) {
           return;
         }
 
-        const mode = resolveLoadMode(currentSource, loadMode);
+        const mode = resolveLoadMode(source, loadMode);
 
         const response = mode === 'figure' ? hub.loadFigure(content) : hub.loadScene(content);
+
+        resizeViewer();
+
+        loadedKeyRef.current = loadKey;
 
         console.log('viewer response:', response);
       } catch (error) {
@@ -181,6 +228,10 @@ const UiViewerContent = ({
           );
         }
       } finally {
+        if (loadingKeyRef.current === loadKey) {
+          loadingKeyRef.current = null;
+        }
+
         if (!cancelled && loadingStarted) {
           stopLoadingRef.current();
         }
@@ -191,12 +242,17 @@ const UiViewerContent = ({
 
     return () => {
       cancelled = true;
+      cancelAnimationFrame(resizeFrameId);
+
+      if (loadingKeyRef.current === loadKey) {
+        loadingKeyRef.current = null;
+      }
 
       if (loadingStarted) {
         stopLoadingRef.current();
       }
     };
-  }, [hub, sourceKey, loadMode, defaultFigure]);
+  }, [hub, source, sourceKey, loadMode, defaultFigure, showDefaultFigure]);
 
   return (
     <div className="ui-viewer">

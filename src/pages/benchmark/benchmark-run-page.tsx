@@ -1,6 +1,8 @@
+// Core
 import { useMemo, useState } from 'react';
+// Routing
 import { useNavigate, useParams } from 'react-router-dom';
-
+// Icons
 import {
   ArrowLeftRegular,
   CalendarRegular,
@@ -9,18 +11,27 @@ import {
   GaugeRegular,
   SparkleRegular,
 } from '@fluentui/react-icons';
-
-import { AppShell, UiPageHero } from '@/components';
-
+// Components
+import {
+  AppShell,
+  BenchmarkReportChart,
+  BenchmarkReportMetric,
+  UiButton,
+  UiPageHero,
+} from '@/components';
+// Hooks
 import { useAlerts, useBenchmarkRuns } from '@/hooks';
-
+// Types
 import {
   AlertPosition,
   AlertStatus,
+  type BenchmarkReportSummary,
   type BenchmarkRunResponse,
   type BenchmarkTestResultResponse,
+  UiButtonSize,
+  UiButtonVariant,
 } from '@/types';
-
+// Shared
 import {
   formatBenchmarkDateTime,
   formatBenchmarkMetric,
@@ -29,31 +40,6 @@ import {
   getBenchmarkTestTitle,
   routeNames,
 } from '@/shared';
-
-type BenchmarkReportSummary = {
-  averageFps: number;
-  minFps: number;
-  averageFrameTime: number;
-  maxFrameTime: number;
-  objectsCount: number;
-  drawCalls: number;
-  triangles: number;
-  geometries: number;
-  textures: number;
-  memoryUsedMb: number | null;
-};
-
-type BenchmarkReportMetricProps = {
-  label: string;
-  value: string;
-  accent?: boolean;
-};
-
-type BenchmarkReportChartProps = {
-  title: string;
-  value: string;
-  values: Array<number | null>;
-};
 
 const getBenchmarkRunSummary = (run: BenchmarkRunResponse): BenchmarkReportSummary | null => {
   if (run.tests.length === 0) {
@@ -82,71 +68,6 @@ const getBenchmarkRunSummary = (run: BenchmarkRunResponse): BenchmarkReportSumma
     textures: Math.max(...tests.map((test) => test.textures)),
     memoryUsedMb: memoryValues.length > 0 ? Math.max(...memoryValues) : null,
   };
-};
-
-const getChartPoints = (values: number[], width: number, height: number) => {
-  if (values.length === 0) {
-    return '';
-  }
-
-  const min = Math.min(...values);
-  const max = Math.max(...values);
-  const range = max - min || 1;
-
-  return values
-    .map((value, index) => {
-      const x = values.length === 1 ? 0 : (index / (values.length - 1)) * width;
-      const y = height - ((value - min) / range) * height;
-
-      return `${x},${y}`;
-    })
-    .join(' ');
-};
-
-const BenchmarkReportMetric = ({ label, value, accent = false }: BenchmarkReportMetricProps) => {
-  return (
-    <article
-      className={['benchmark-report-metric', accent ? 'benchmark-report-metric--accent' : ''].join(
-        ' ',
-      )}
-    >
-      <span>{label}</span>
-      <strong>{value}</strong>
-    </article>
-  );
-};
-
-const BenchmarkReportChart = ({ title, value, values }: BenchmarkReportChartProps) => {
-  const width = 420;
-  const height = 120;
-
-  const normalizedValues = values.filter(
-    (item): item is number => item !== null && item !== undefined && !Number.isNaN(item),
-  );
-
-  const points = getChartPoints(normalizedValues, width, height);
-
-  return (
-    <article className="benchmark-report-chart">
-      <div className="benchmark-report-chart__header">
-        <span>{title}</span>
-        <strong>{value}</strong>
-      </div>
-
-      {normalizedValues.length > 0 ? (
-        <svg
-          className="benchmark-report-chart__svg"
-          viewBox={`0 0 ${width} ${height}`}
-          preserveAspectRatio="none"
-          aria-hidden="true"
-        >
-          <polyline points={points} fill="none" />
-        </svg>
-      ) : (
-        <div className="benchmark-report-chart__empty">Недостаточно данных</div>
-      )}
-    </article>
-  );
 };
 
 export const BenchmarkRunPage = () => {
@@ -204,14 +125,15 @@ export const BenchmarkRunPage = () => {
     <AppShell>
       <main className="benchmark-report-page">
         <section className="benchmark-report-hero">
-          <button
-            className="benchmark-report-back"
-            type="button"
+          <UiButton
+            title="Запуски"
+            size={UiButtonSize.Medium}
+            variant={UiButtonVariant.Light}
+            icon={<ArrowLeftRegular />}
             onClick={() => navigate(routeNames.BENCHMARK_RUNS_PAGE)}
           >
-            <ArrowLeftRegular />
-            <span>Запуски</span>
-          </button>
+            Запуски
+          </UiButton>
 
           <UiPageHero
             badgeIcon={<SparkleRegular />}

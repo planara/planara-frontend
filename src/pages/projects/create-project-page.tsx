@@ -26,6 +26,7 @@ import {
 } from '@/types';
 // Shared
 import { createFileDownloadUrl, uploadFile, routeNames } from '@/shared';
+import { FigureType } from '@planara/types';
 
 export const CreateProjectPage = () => {
   const navigate = useNavigate();
@@ -257,9 +258,8 @@ export const CreateProjectPage = () => {
               </button>
             </div>
           </form>
-
-          <aside className="create-project-viewer">
-            <UiViewer source={viewerSource} />
+          <aside className="project-preview-viewer">
+            <UiViewer source={viewerSource} showDefaultFigure defaultFigure={FigureType.Cube} />
           </aside>
         </section>
       </main>

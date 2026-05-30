@@ -1,35 +1,26 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+// Core
+import { useEffect, useMemo, useRef } from 'react';
+// Routing
 import { useNavigate, useSearchParams } from 'react-router-dom';
-
-import {
-  ArrowLeftRegular,
-  BeakerRegular,
-  ChartMultipleRegular,
-  SparkleRegular,
-} from '@fluentui/react-icons';
-
+// Icons
+import { ChartMultipleRegular } from '@fluentui/react-icons';
+// Benchmark
 import { BenchmarkCanvas, BenchmarkProvider, useBenchmarkHub } from '@planara/react';
-
-import {
-  type BenchmarkConfig,
-  type BenchmarkReport,
-  type BenchmarkRunResult,
-  type RendererConfigInput,
-} from '@planara/types';
-
-import { useAlerts, useBenchmarkLiveMetrics, useBenchmarkRuns } from '@/hooks';
-
+// Types
+import { type BenchmarkConfig, type RendererConfigInput } from '@planara/types';
 import { AlertPosition, AlertStatus, type BenchmarkMetricHistoryPoint } from '@/types';
-
+// Hooks
+import { useAlerts, useBenchmarkLiveMetrics, useBenchmarkRuns } from '@/hooks';
+// Shared
 import {
   createSaveBenchmarkRunRequest,
   formatBenchmarkMetric,
   formatBenchmarkNumber,
-  formatBenchmarkStatus,
-  getBenchmarkTestTitle,
   parseBenchmarkTests,
   routeNames,
 } from '@/shared';
+// Components
+import { BenchmarkExecutionChart, BenchmarkExecutionMetric } from '@/components';
 
 const rendererConfig: RendererConfigInput = {
   background: {
@@ -43,84 +34,6 @@ const getBenchmarkRunPath = (runId: string) => {
   return `/benchmark/${runId}`;
 };
 
-type BenchmarkChartProps = {
-  title: string;
-  value: string;
-  values: number[];
-};
-
-type BenchmarkExecutionMetricProps = {
-  label: string;
-  value: string;
-  accent?: boolean;
-};
-
-const getChartPoints = (values: number[], width: number, height: number) => {
-  if (values.length === 0) {
-    return '';
-  }
-
-  const min = Math.min(...values);
-  const max = Math.max(...values);
-  const range = max - min || 1;
-
-  return values
-    .map((value, index) => {
-      const x = values.length === 1 ? 0 : (index / (values.length - 1)) * width;
-      const y = height - ((value - min) / range) * height;
-
-      return `${x},${y}`;
-    })
-    .join(' ');
-};
-
-const BenchmarkExecutionChart = ({ title, value, values }: BenchmarkChartProps) => {
-  const width = 320;
-  const height = 92;
-
-  const points = getChartPoints(values, width, height);
-
-  return (
-    <article className="benchmark-execution-chart">
-      <div className="benchmark-execution-chart__header">
-        <span>{title}</span>
-        <strong>{value}</strong>
-      </div>
-
-      {values.length > 0 ? (
-        <svg
-          className="benchmark-execution-chart__svg"
-          viewBox={`0 0 ${width} ${height}`}
-          preserveAspectRatio="none"
-          aria-hidden="true"
-        >
-          <polyline points={points} fill="none" />
-        </svg>
-      ) : (
-        <div className="benchmark-execution-chart__empty">Недостаточно данных</div>
-      )}
-    </article>
-  );
-};
-
-const BenchmarkExecutionMetric = ({
-  label,
-  value,
-  accent = false,
-}: BenchmarkExecutionMetricProps) => {
-  return (
-    <article
-      className={[
-        'benchmark-execution-metric',
-        accent ? 'benchmark-execution-metric--accent' : '',
-      ].join(' ')}
-    >
-      <span>{label}</span>
-      <strong>{value}</strong>
-    </article>
-  );
-};
-
 const BenchmarkExecutionPageContent = () => {
   const navigate = useNavigate();
 
@@ -131,10 +44,6 @@ const BenchmarkExecutionPageContent = () => {
   const { addAlert } = useAlerts();
   const { saveBenchmarkRun } = useBenchmarkRuns();
   const { metrics, history, clearMetrics } = useBenchmarkLiveMetrics();
-
-  const [isRunning, setIsRunning] = useState(false);
-  const [runResult, setRunResult] = useState<BenchmarkRunResult | null>(null);
-  const [report, setReport] = useState<BenchmarkReport | null>(null);
 
   const hasStartedRef = useRef(false);
   const mountedRef = useRef(true);
@@ -234,17 +143,13 @@ const BenchmarkExecutionPageContent = () => {
       };
 
       try {
-        setIsRunning(true);
-        setRunResult(null);
-        setReport(null);
-
         clearMetrics();
 
         runStartedAtRef.current = performance.now();
         historyForSaveRef.current = [];
         isCollectingMetricsRef.current = true;
 
-        const result = await hub.run(config);
+        await hub.run(config);
 
         isCollectingMetricsRef.current = false;
 
@@ -262,9 +167,6 @@ const BenchmarkExecutionPageContent = () => {
           );
           return;
         }
-
-        setRunResult(result);
-        setReport(nextReport);
 
         const request = createSaveBenchmarkRunRequest(
           nextReport,
@@ -303,10 +205,6 @@ const BenchmarkExecutionPageContent = () => {
         addAlert('Не удалось выполнить бенчмарк', AlertStatus.Error, AlertPosition.TopRight);
       } finally {
         isCollectingMetricsRef.current = false;
-
-        if (mountedRef.current) {
-          setIsRunning(false);
-        }
       }
     };
 
@@ -315,45 +213,6 @@ const BenchmarkExecutionPageContent = () => {
 
   return (
     <main className="benchmark-execution-page">
-      <header className="benchmark-execution-toolbar">
-        <div className="benchmark-execution-toolbar__left">
-          <button
-            className="benchmark-execution-toolbar__back"
-            type="button"
-            onClick={() => navigate(routeNames.BENCHMARK_RUNS_PAGE)}
-          >
-            <ArrowLeftRegular />
-          </button>
-
-          <div className="benchmark-execution-toolbar__brand">
-            <div className="benchmark-execution-toolbar__logo">
-              <BeakerRegular />
-            </div>
-
-            <div>
-              <p className="benchmark-execution-toolbar__name">Запуск бенчмарка</p>
-              <p className="benchmark-execution-toolbar__caption">
-                Live-измерение производительности
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div className="benchmark-execution-toolbar__badge">
-          <SparkleRegular />
-          <span>{isRunning ? 'Тест выполняется' : 'Сохранение отчёта'}</span>
-        </div>
-
-        <button
-          className="benchmark-execution-toolbar__button"
-          type="button"
-          disabled={isRunning}
-          onClick={() => navigate(routeNames.BENCHMARK_RUNS_PAGE)}
-        >
-          К списку запусков
-        </button>
-      </header>
-
       <section className="benchmark-execution-layout">
         <section className="benchmark-execution-viewport">
           <BenchmarkCanvas
@@ -463,34 +322,6 @@ const BenchmarkExecutionPageContent = () => {
                 values={trianglesValues}
               />
             </div>
-          </section>
-
-          <section className="benchmark-execution-card">
-            <div className="benchmark-execution-card__header">
-              <div>
-                <p className="benchmark-execution-section__eyebrow">Итог</p>
-                <h2 className="benchmark-execution-card__title">Результаты</h2>
-              </div>
-            </div>
-
-            {runResult ? (
-              <div className="benchmark-execution-result-list">
-                {runResult.tests.map((test) => (
-                  <div key={test.type} className="benchmark-execution-result">
-                    <span>{getBenchmarkTestTitle(test.type)}</span>
-                    <strong>{formatBenchmarkStatus(String(test.status))}</strong>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <p className="benchmark-execution-empty">Тесты выполняются или ещё не запускались.</p>
-            )}
-
-            {report && (
-              <p className="benchmark-execution-empty">
-                Отчёт сохранён и будет открыт автоматически.
-              </p>
-            )}
           </section>
         </aside>
       </section>

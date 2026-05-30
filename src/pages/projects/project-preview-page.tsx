@@ -1,21 +1,28 @@
-import { type ReactNode, type SubmitEvent, useEffect, useMemo, useRef, useState } from 'react';
+// Core
+import { type SubmitEvent, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-
+// Icons
 import {
   ArrowLeftRegular,
   ArrowRightRegular,
   CalendarRegular,
   DeleteRegular,
   EditRegular,
-  FolderRegular,
   SaveRegular,
   SparkleRegular,
 } from '@fluentui/react-icons';
-
-import { AppShell, UiButton, UiInput, UiPageHero, UiViewer } from '@/components';
-
+// Components
+import {
+  AppShell,
+  ProjectPreviewField,
+  UiButton,
+  UiInput,
+  UiPageHero,
+  UiViewer,
+} from '@/components';
+// Hooks
 import { useAlerts, useLoading, useProjects } from '@/hooks';
-
+// Types
 import {
   AlertPosition,
   AlertStatus,
@@ -24,8 +31,8 @@ import {
   UiButtonVariant,
   type ProjectResponse,
 } from '@/types';
-
-import { routeNames } from '@/shared';
+// Shared
+import { formatDate, routeNames } from '@/shared';
 
 type ProjectForm = {
   name: string;
@@ -33,14 +40,6 @@ type ProjectForm = {
 };
 
 type ProjectFieldKey = keyof ProjectForm;
-
-type ProjectPreviewFieldProps = {
-  title: string;
-  description: string;
-  dirty: boolean;
-  icon: ReactNode;
-  children: ReactNode;
-};
 
 const PROJECT_FIELDS: ProjectFieldKey[] = ['name', 'description'];
 
@@ -51,47 +50,6 @@ const projectToForm = (project?: ProjectResponse | null): ProjectForm => {
     name: project?.name ?? '',
     description: project?.description ?? '',
   };
-};
-
-const formatDate = (value?: string | null) => {
-  if (!value) {
-    return 'Не обновлялся';
-  }
-
-  return new Intl.DateTimeFormat('ru-RU', {
-    day: '2-digit',
-    month: 'short',
-    year: 'numeric',
-  }).format(new Date(value));
-};
-
-const ProjectPreviewField = ({
-  title,
-  description,
-  dirty,
-  icon,
-  children,
-}: ProjectPreviewFieldProps) => {
-  return (
-    <div
-      className={['project-preview-field', dirty ? 'project-preview-field--dirty' : ''].join(' ')}
-    >
-      <div className="project-preview-field__top">
-        <div className="project-preview-field__meta">
-          <div className="project-preview-field__icon">{icon}</div>
-
-          <div>
-            <span>{title}</span>
-            <small>{description}</small>
-          </div>
-        </div>
-
-        {dirty && <b>Изменено</b>}
-      </div>
-
-      {children}
-    </div>
-  );
 };
 
 export const ProjectPreviewPage = () => {
@@ -376,15 +334,6 @@ export const ProjectPreviewPage = () => {
                       <strong>{formatDate(project.updatedAt)}</strong>
                     </div>
                   </div>
-
-                  <div className="project-preview-meta__item">
-                    <FolderRegular />
-
-                    <div>
-                      <span>ID проекта</span>
-                      <strong>{project.id}</strong>
-                    </div>
-                  </div>
                 </div>
 
                 <div className="project-preview-actions">
@@ -410,7 +359,7 @@ export const ProjectPreviewPage = () => {
                     className="project-preview-button project-preview-button--dark"
                     type="button"
                     disabled={isBusy}
-                    onClick={() => navigate(`/projects/${project.id}`)}
+                    onClick={() => navigate(`/projects/${project.id}/edit`)}
                   >
                     <span>Открыть редактор</span>
                     <ArrowRightRegular />

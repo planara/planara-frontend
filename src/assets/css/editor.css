@@ -654,6 +654,10 @@
     transition:
       box-shadow 0.18s ease,
       transform 0.18s ease;
+
+    span {
+      color: #ffffff;
+    }
   }
 
   .editor-desktop-only__button:hover {

@@ -1,49 +1,36 @@
 // Core
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 // Routing
 import { useNavigate } from 'react-router-dom';
 // Icons
-import {
-  AddRegular,
-  ArrowRightRegular,
-  CalendarRegular,
-  DeleteRegular,
-  FolderRegular,
-  SparkleRegular,
-} from '@fluentui/react-icons';
+import { AddRegular, CalendarRegular, FolderRegular, SparkleRegular } from '@fluentui/react-icons';
 // Components
-import { AppShell, UiModal, CreateProjectModal, UiLoadMore, UiLoader } from '@/components';
+import { AppShell, UiLoadMore, UiLoader, UiPageHero, UiIconBox, ProjectCard } from '@/components';
 // Hooks
-import { useAlerts, useProjects } from '@/hooks';
+import { useAlerts, useLoading, useProjects } from '@/hooks';
 // Types
-import { AlertPosition, AlertStatus } from '@/types';
-
-type CreateProjectData = {
-  name: string;
-  description: string;
-};
-
-const formatDate = (value: string | null) => {
-  if (!value) {
-    return 'Не обновлялся';
-  }
-
-  return new Intl.DateTimeFormat('ru-RU', {
-    day: '2-digit',
-    month: 'short',
-    year: 'numeric',
-  }).format(new Date(value));
-};
+import { AlertPosition, AlertStatus, UiIconBoxVariant } from '@/types';
+// Shared
+import { routeNames, formatDate } from '@/shared';
 
 export const ProjectsPage = () => {
   const navigate = useNavigate();
 
   const { addAlert } = useAlerts();
 
-  const { projects, pageInfo, loading, error, loadingMore, loadMoreProjects, refetchProjects } =
-    useProjects();
+  const { startLoading, stopLoading } = useLoading();
 
-  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const {
+    projects,
+    totalCount,
+    pageInfo,
+    loading,
+    error,
+    loadingMore,
+    loadMoreProjects,
+    refetchProjects,
+    deleteProject,
+  } = useProjects();
 
   const lastUpdatedProject = useMemo(() => {
     return [...projects].sort((a, b) => {
@@ -54,48 +41,30 @@ export const ProjectsPage = () => {
     })[0];
   }, [projects]);
 
-  const openCreateModal = () => {
-    setIsCreateModalOpen(true);
-  };
-
-  const closeCreateModal = () => {
-    setIsCreateModalOpen(false);
-  };
-
-  const handleCreateProject = async (data: CreateProjectData) => {
-    if (!data.name.trim()) {
-      addAlert('Введите название проекта', AlertStatus.Error, AlertPosition.TopRight);
-      return;
-    }
-
-    /**
-     * TODO:
-     * Здесь лучше вызвать createProject mutation.
-     *
-     * await createProject({
-     *   name: data.name.trim(),
-     *   description: data.description.trim() || null,
-     * });
-     */
-
-    closeCreateModal();
-
-    await refetchProjects();
-
-    addAlert('Проект создан', AlertStatus.Success, AlertPosition.TopRight);
-  };
-
   const handleDeleteProject = async (projectId: string) => {
-    /**
-     * TODO:
-     * Здесь лучше вызвать deleteProject mutation.
-     *
-     * await deleteProject(projectId);
-     */
+    try {
+      startLoading();
 
-    console.log('delete project:', projectId);
+      const response = await deleteProject({
+        projectId: projectId,
+      });
 
-    await refetchProjects();
+      if (!response?.success) {
+        addAlert('Не удалось удалить проект', AlertStatus.Error, AlertPosition.TopRight);
+        return;
+      }
+
+      addAlert('Проект удалён', AlertStatus.Success, AlertPosition.TopRight);
+      await refetchProjects();
+
+      navigate(routeNames.PROJECTS_PAGE);
+    } catch (error) {
+      console.error(error);
+
+      addAlert('Не удалось удалить проект', AlertStatus.Error, AlertPosition.TopRight);
+    } finally {
+      stopLoading();
+    }
 
     addAlert('Проект удалён', AlertStatus.Success, AlertPosition.TopRight);
   };
@@ -105,49 +74,26 @@ export const ProjectsPage = () => {
   return (
     <AppShell>
       <main className="projects-page">
-        <section className="projects-hero">
-          <div className="projects-hero__content">
-            <div className="projects-hero__badge">
-              <SparkleRegular />
-              <span>Проекты Planara</span>
-            </div>
-
-            <h1 className="projects-hero__title">Ваши 3D-проекты</h1>
-
-            <p className="projects-hero__subtitle">
-              Создавайте рабочие пространства, открывайте сохранённые сцены и управляйте проектами
-              редактора.
-            </p>
-          </div>
-
-          <div className="projects-hero__actions">
-            <button
-              className="projects-button projects-button--dark"
-              type="button"
-              onClick={openCreateModal}
-            >
-              <AddRegular />
-              <span>Создать проект</span>
-            </button>
-          </div>
-        </section>
+        <UiPageHero
+          badgeIcon={<SparkleRegular />}
+          badge="Проекты"
+          title="Ваши 3D-проекты"
+          subtitle="Создавайте рабочие пространства, открывайте сохранённые сцены и управляйте проектами
+              редактора."
+        />
 
         <section className="projects-overview">
           <article className="projects-stat projects-stat--dark">
-            <div className="projects-stat__icon">
-              <FolderRegular />
-            </div>
+            <UiIconBox icon={<FolderRegular />} />
 
             <div>
               <p className="projects-stat__label">Всего загружено</p>
-              <p className="projects-stat__value">{projects.length}</p>
+              <p className="projects-stat__value">{totalCount}</p>
             </div>
           </article>
 
           <article className="projects-stat">
-            <div className="projects-stat__icon">
-              <CalendarRegular />
-            </div>
+            <UiIconBox icon={<CalendarRegular />} variant={UiIconBoxVariant.Light} />
 
             <div>
               <p className="projects-stat__label">Последнее обновление</p>
@@ -168,7 +114,11 @@ export const ProjectsPage = () => {
               <h2 className="projects-panel__title">Рабочие пространства</h2>
             </div>
 
-            <button className="projects-panel__create" type="button" onClick={openCreateModal}>
+            <button
+              className="projects-panel__create"
+              type="button"
+              onClick={() => navigate(routeNames.CREATE_PROJECT_PAGE)}
+            >
               <AddRegular />
               <span>Новый проект</span>
             </button>
@@ -187,7 +137,7 @@ export const ProjectsPage = () => {
               <h3 className="projects-empty__title">Не удалось загрузить проекты</h3>
 
               <p className="projects-empty__text">
-                Проверьте подключение к серверу или попробуйте обновить страницу.
+                Проверьте подключение к интернету или попробуйте обновить страницу.
               </p>
 
               <button
@@ -202,59 +152,12 @@ export const ProjectsPage = () => {
             <>
               <div className="projects-grid">
                 {projects.map((project) => (
-                  <article key={project.id} className="project-card">
-                    <div className="project-card__preview">
-                      <div className="project-card__grid" />
-
-                      <div className="project-card__object">
-                        <div className="project-card__ring" />
-                        <div className="project-card__sphere" />
-                      </div>
-                    </div>
-
-                    <div className="project-card__body">
-                      <div className="project-card__top">
-                        <div className="project-card__content">
-                          <h3 className="project-card__title">{project.name}</h3>
-
-                          <p className="project-card__description">
-                            {project.description || 'Описание проекта пока не добавлено.'}
-                          </p>
-                        </div>
-
-                        <button
-                          className="project-card__delete"
-                          type="button"
-                          aria-label="Удалить проект"
-                          onClick={() => handleDeleteProject(project.id)}
-                        >
-                          <DeleteRegular />
-                        </button>
-                      </div>
-
-                      <div className="project-card__meta">
-                        <span>
-                          <CalendarRegular />
-                          Создан: {formatDate(project.createdAt)}
-                        </span>
-                      </div>
-
-                      <div className="project-card__footer">
-                        <span className="project-card__updated">
-                          Обновлен: {formatDate(project.updatedAt)}
-                        </span>
-
-                        <button
-                          className="project-card__open"
-                          type="button"
-                          onClick={() => navigate(`/projects/${project.id}`)}
-                        >
-                          <span>Открыть</span>
-                          <ArrowRightRegular />
-                        </button>
-                      </div>
-                    </div>
-                  </article>
+                  <ProjectCard
+                    key={project.id}
+                    project={project}
+                    onOpen={() => navigate(`/projects/${project.id}/preview`)}
+                    onDelete={() => handleDeleteProject(project.id)}
+                  />
                 ))}
               </div>
 
@@ -281,7 +184,7 @@ export const ProjectsPage = () => {
               <button
                 className="projects-button projects-button--dark"
                 type="button"
-                onClick={openCreateModal}
+                onClick={() => navigate(routeNames.CREATE_PROJECT_PAGE)}
               >
                 <AddRegular />
                 <span>Создать проект</span>
@@ -290,10 +193,6 @@ export const ProjectsPage = () => {
           )}
         </section>
       </main>
-
-      <UiModal open={isCreateModalOpen} onClose={closeCreateModal}>
-        <CreateProjectModal onClose={closeCreateModal} onCreate={handleCreateProject} />
-      </UiModal>
     </AppShell>
   );
 };

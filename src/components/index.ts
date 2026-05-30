@@ -6,3 +6,4 @@ export * from './projects';
 export * from './routes';
 export * from './sdk';
 export * from './ui';
+export * from './benchmark';
