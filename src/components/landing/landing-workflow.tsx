@@ -5,8 +5,8 @@ export const LandingWorkflow = () => {
   return (
     <section className="landing-workflow">
       <div className="landing-workflow__header">
-        <p className="landing-section__eyebrow">Workflow</p>
-        <h2 className="landing-workflow__title">От проекта до готовой сцены</h2>
+        <p className="landing-section__eyebrow">Как это работает</p>
+        <h2 className="landing-workflow__title">От идеи до сохранённой сцены</h2>
       </div>
 
       <div className="landing-workflow__steps">

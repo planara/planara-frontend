@@ -9,15 +9,16 @@ export const LandingEditingFeatures = () => {
   return (
     <section id="geometry" className="landing-geometry">
       <div className="landing-geometry__intro">
-        <p className="landing-section__eyebrow">Geometry editing</p>
+        <p className="landing-section__eyebrow">Редактирование геометрии</p>
 
         <h2 className="landing-geometry__title">
-          Редактирование не только объектов, но и геометрии
+          Работайте не только с объектами, но и с их формой
         </h2>
 
         <p className="landing-geometry__text">
-          В Planara можно работать с разными уровнями выделения: объектами, рёбрами и вершинами. Это
-          делает редактор полезным не только для просмотра сцены, но и для её изменения.
+          Редактор позволяет работать не только с объектом целиком, но и с его внутренней
+          структурой: вершинами, рёбрами и гранями. Это удобно, когда нужно точечно поправить форму,
+          силуэт или отдельный участок модели.
         </p>
       </div>
 
@@ -39,25 +40,21 @@ export const LandingEditingFeatures = () => {
             </div>
 
             <div className="landing-geometry-demo">
-              {/* Позже можно заменить на GIF:
-                  <img src="/assets/landing/vertex-demo.gif" alt={block.title} />
-                */}
-
-              <div className="landing-geometry-demo__grid" />
-
               <UiBadge icon={<EditRegular />} className="landing-geometry-demo__badge">
                 <span>{block.demoTitle}</span>
               </UiBadge>
 
-              <div className="landing-geometry-demo__mesh">
-                <span className="landing-geometry-demo__point landing-geometry-demo__point--one" />
-                <span className="landing-geometry-demo__point landing-geometry-demo__point--two" />
-                <span className="landing-geometry-demo__point landing-geometry-demo__point--three" />
-                <span className="landing-geometry-demo__point landing-geometry-demo__point--four" />
-
-                <span className="landing-geometry-demo__edge landing-geometry-demo__edge--one" />
-                <span className="landing-geometry-demo__edge landing-geometry-demo__edge--two" />
-                <span className="landing-geometry-demo__edge landing-geometry-demo__edge--three" />
+              <div className="landing-geometry-demo__media">
+                <video
+                  className="landing-editor-frame__video"
+                  src={block.video}
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  preload="metadata"
+                  poster={block.poster}
+                />
               </div>
 
               <p className="landing-geometry-demo__caption">{block.demoCaption}</p>
