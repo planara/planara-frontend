@@ -55,8 +55,6 @@ jobs:
           file: ./Dockerfile
           push: true
           platforms: linux/amd64,linux/arm64
-          build-args: |
-            VITE_API_URL=/api
           tags: |
             ${{ steps.vars.outputs.image }}:latest
             ${{ steps.vars.outputs.image }}:${{ steps.ver.outputs.version }}

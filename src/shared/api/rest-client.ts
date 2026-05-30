@@ -3,11 +3,7 @@ import axios, { AxiosError, type InternalAxiosRequestConfig } from 'axios';
 // Shared
 import { authStore, refreshAuthSession, routeNames } from '@/shared';
 
-const restUrl = import.meta.env.VITE_API_URL;
-
-if (!restUrl) {
-  throw new Error('VITE_API_URL is not defined');
-}
+const restUrl = import.meta.env.VITE_API_URL ?? '';
 
 type RetriableRequestConfig = InternalAxiosRequestConfig & {
   _retry?: boolean;

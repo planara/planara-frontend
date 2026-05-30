@@ -15,11 +15,7 @@ type GraphQlResponse<TData> = {
   }>;
 };
 
-const graphqlUrl = import.meta.env.VITE_API_URL;
-
-if (!graphqlUrl) {
-  throw new Error('VITE_API_URL is not defined');
-}
+const graphqlUrl = import.meta.env.VITE_API_URL ?? '';
 
 export const refreshAuthSession = async () => {
   const refreshToken = authStore.refreshToken;
