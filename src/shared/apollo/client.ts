@@ -8,11 +8,7 @@ import { authStore } from '@/shared/store/auth-store';
 // Services
 import { refreshAuthSession } from '@/shared/services/refresh-auth-session';
 
-const graphqlUrl = import.meta.env.VITE_API_URL;
-
-if (!graphqlUrl) {
-  throw new Error('VITE_API_URL is not defined');
-}
+const graphqlUrl = import.meta.env.VITE_API_URL ?? '';
 
 const TOKEN_EXPIRE_SKEW_MS = 30_000;
 

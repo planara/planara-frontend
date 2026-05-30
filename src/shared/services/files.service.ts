@@ -24,7 +24,8 @@ export const updateFile = async (fileId: string, file: File) => {
 };
 
 export const createFileDownloadUrl = (fileId: string) => {
-  const apiUrl = import.meta.env.VITE_API_URL.replace(/\/$/, '');
+  const restUrl = import.meta.env.VITE_API_URL ?? '';
+  const apiUrl = restUrl.replace(/\/$/, '');
 
   return `${apiUrl}/files/${fileId}/download`;
 };
