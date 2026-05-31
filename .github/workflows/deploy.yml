@@ -6,7 +6,7 @@ on:
     types: [completed]
 
 env:
-  IMAGE_NAME: planara-benchmarks
+  IMAGE_NAME: planara-frontend
 
 jobs:
   resolve-release:
@@ -123,8 +123,8 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
-          context: ./src
-          file: ./src/Dockerfile
+          context: .
+          file: ./Dockerfile
           push: true
           platforms: linux/amd64,linux/arm64
           tags: |
