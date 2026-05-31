@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pres-frontend
+  namespace: planara
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: pres-frontend
+  template:
+    metadata:
+      labels:
+        app: pres-frontend
+    spec:
+      imagePullSecrets:
+        - name: ghcr-secret
+
+      containers:
+        - name: pres-frontend
+          image: ghcr.io/planara/planara-frontend:latest
+
+          ports:
+            - name: http
+              containerPort: 80
+
+          env:
+            - name: API_UPSTREAM
+              value: "http://pres-gateway:8080"
+
+          readinessProbe:
+            tcpSocket:
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 12
+
+          livenessProbe:
+            tcpSocket:
+              port: 80
+            initialDelaySeconds: 30
+            periodSeconds: 20
+            timeoutSeconds: 3
+            failureThreshold: 6

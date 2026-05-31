@@ -9,14 +9,13 @@ on:
 jobs:
   lint:
     runs-on: ubuntu-latest
-    outputs:
-      lint-status: ${{ steps.lint.outcome }}
+
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: '20'
 
@@ -24,21 +23,21 @@ jobs:
         run: npm ci
 
       - name: Run ESLint
-        id: lint
         run: npm run lint
 
       - name: Run Prettier check
-        run: npx prettier --check 'src/**/*.{ts,js,json,css}'
+        run: npx prettier --check 'src/**/*.{ts,tsx,js,jsx,json,css,md}'
 
   build:
     runs-on: ubuntu-latest
     needs: lint
+
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: '20'
 
