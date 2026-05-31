@@ -6,9 +6,9 @@ on:
     branches: [main]
 
 env:
-  IMAGE_NAME: planara-gateway
-  DOCKER_CONTEXT: ./src
-  DOCKERFILE: ./src/Dockerfile
+  IMAGE_NAME: planara-frontend
+  DOCKER_CONTEXT: .
+  DOCKERFILE: ./Dockerfile
 
 jobs:
   release:
