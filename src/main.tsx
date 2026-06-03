@@ -44,7 +44,6 @@ import { useAlerts } from '@/hooks';
 import { AlertProvider } from '@/shared';
 import { PrivateRoute, PublicRoute } from '@/components';
 
-
 // App layout
 const App = () => {
   // Loading animation

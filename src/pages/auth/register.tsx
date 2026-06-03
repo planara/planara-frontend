@@ -214,14 +214,10 @@ export const RegisterPage = () => {
                 }}
                 label={
                   <span>
-                    Я принимаю{' '}
-                    <Link href={routeNames.TERMS_PAGE}>Правила пользования</Link> и даю согласие
-                    на обработку персональных данных для создания аккаунта и работы сервиса в
-                    соответствии с{' '}
-                    <Link href={routeNames.PRIVACY_POLICY_PAGE}>
-                      Политикой конфиденциальности
-                    </Link>
-                    .
+                    Я принимаю <Link href={routeNames.TERMS_PAGE}>Правила пользования</Link> и даю
+                    согласие на обработку персональных данных для создания аккаунта и работы сервиса
+                    в соответствии с{' '}
+                    <Link href={routeNames.PRIVACY_POLICY_PAGE}>Политикой конфиденциальности</Link>.
                   </span>
                 }
               />
