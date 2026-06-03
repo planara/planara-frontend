@@ -3,15 +3,23 @@ import { useEffect, useMemo, useState, type SubmitEvent } from 'react';
 // Icons
 import {
   ArrowClockwiseRegular,
+  DeleteRegular,
   EditRegular,
   LinkRegular,
   PersonRegular,
   SaveRegular,
   SignOutRegular,
   SparkleRegular,
+  WarningRegular,
 } from '@fluentui/react-icons';
 // Components
-import { AppShell, SettingsInputField, UiButton, UiPageHero } from '@/components';
+import {
+  AppShell,
+  SettingsDeleteAccountModal,
+  SettingsInputField,
+  UiButton,
+  UiPageHero,
+} from '@/components';
 // Hooks
 import { useAccount, useAuth, useLoading, useAlerts } from '@/hooks';
 // Types
@@ -51,7 +59,7 @@ const profileToForm = (profile?: ProfileResponse | null): ProfileForm => {
 
 export const SettingsPage = () => {
   const { profile, loading, error, updateProfile } = useAccount();
-  const { logout } = useAuth();
+  const { logout, deleteAccount } = useAuth();
 
   const { startLoading, stopLoading } = useLoading();
   const { addAlert } = useAlerts();
@@ -59,6 +67,8 @@ export const SettingsPage = () => {
   const [formChanges, setFormChanges] = useState<Partial<ProfileForm>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [isDeletingAccount, setIsDeletingAccount] = useState(false);
 
   const initialForm = useMemo(() => {
     return profileToForm(profile);
@@ -116,7 +126,7 @@ export const SettingsPage = () => {
 
   const dirtyCount = PROFILE_FIELDS.filter((field) => dirtyFields[field]).length;
   const hasChanges = dirtyCount > 0;
-  const isBusy = isSubmitting || isLoggingOut || loading;
+  const isBusy = isSubmitting || isLoggingOut || isDeletingAccount || loading;
 
   const updateField = (field: ProfileFieldKey, value: string) => {
     setFormChanges((prev) => ({
@@ -127,6 +137,22 @@ export const SettingsPage = () => {
 
   const resetForm = () => {
     setFormChanges({});
+  };
+
+  const openDeleteModal = () => {
+    if (isBusy) {
+      return;
+    }
+
+    setDeleteModalOpen(true);
+  };
+
+  const closeDeleteModal = () => {
+    if (isDeletingAccount) {
+      return;
+    }
+
+    setDeleteModalOpen(false);
   };
 
   const handleSubmit = async (event: SubmitEvent<HTMLFormElement>) => {
@@ -197,6 +223,39 @@ export const SettingsPage = () => {
       addAlert('Не удалось выйти из аккаунта', AlertStatus.Error, AlertPosition.TopRight);
     } finally {
       setIsLoggingOut(false);
+      stopLoading();
+    }
+  };
+
+  const handleDeleteAccount = async () => {
+    if (isBusy) {
+      return;
+    }
+
+    try {
+      setIsDeletingAccount(true);
+      startLoading();
+
+      const response = await deleteAccount();
+
+      if (!response?.success) {
+        addAlert('Не удалось удалить аккаунт', AlertStatus.Error, AlertPosition.TopRight);
+        return;
+      }
+
+      setDeleteModalOpen(false);
+
+      authStore.logout();
+
+      addAlert('Аккаунт удалён', AlertStatus.Success, AlertPosition.TopRight);
+
+      window.location.replace(routeNames.LOGIN_PAGE);
+    } catch (error) {
+      console.error(error);
+
+      addAlert('Не удалось удалить аккаунт', AlertStatus.Error, AlertPosition.TopRight);
+    } finally {
+      setIsDeletingAccount(false);
       stopLoading();
     }
   };
@@ -335,6 +394,42 @@ export const SettingsPage = () => {
             <span>Выйти из аккаунта</span>
           </button>
         </section>
+
+        <section className="settings-form-card settings-form-card--wide settings-danger-card">
+          <div className="settings-danger-card__content">
+            <div className="settings-danger-card__icon">
+              <WarningRegular />
+            </div>
+
+            <div>
+              <p className="settings-section__eyebrow">Опасная зона</p>
+
+              <h2 className="settings-card-header__title">Удаление аккаунта</h2>
+
+              <p className="settings-danger-card__text">
+                Аккаунт, данные профиля, токены доступа и связанные с пользователем данные будут
+                удалены. После удаления восстановить доступ к аккаунту и проектам невозможно.
+              </p>
+            </div>
+          </div>
+
+          <button
+            className="settings-button settings-button--danger"
+            type="button"
+            disabled={isBusy}
+            onClick={openDeleteModal}
+          >
+            <DeleteRegular />
+            <span>Удалить аккаунт</span>
+          </button>
+        </section>
+
+        <SettingsDeleteAccountModal
+          open={deleteModalOpen}
+          loading={isDeletingAccount}
+          onClose={closeDeleteModal}
+          onConfirm={handleDeleteAccount}
+        />
       </main>
     </AppShell>
   );

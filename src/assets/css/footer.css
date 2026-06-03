@@ -79,3 +79,41 @@
     justify-content: flex-start;
   }
 }
+
+.app-footer__right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.app-footer__links {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.app-footer__links a {
+  color: rgba(17, 17, 17, 0.58);
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1;
+  text-decoration: none;
+  transition: color 0.18s ease;
+}
+
+.app-footer__links a:hover {
+  color: #111111;
+}
+
+@media (max-width: 720px) {
+  .app-footer__right {
+    align-items: flex-start;
+  }
+
+  .app-footer__links {
+    justify-content: flex-start;
+  }
+}

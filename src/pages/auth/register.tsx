@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 // Hooks
 import { useAuth, useLoading, useAlerts } from '@/hooks';
 // Components
-import { Button, Link, Text, Title1 } from '@fluentui/react-components';
+import { Button, Checkbox, Link, Text, Title1 } from '@fluentui/react-components';
 import { AuthPagePreview, UiInput } from '@/components';
 // Types
 import { InputType, AlertStatus, AlertPosition } from '@/types';
@@ -22,6 +22,7 @@ export const RegisterPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [repeatPassword, setRepeatPassword] = useState('');
+  const [consent, setConsent] = useState(false);
 
   const { register } = useAuth();
   const { startLoading, stopLoading } = useLoading();
@@ -36,6 +37,7 @@ export const RegisterPage = () => {
       const response = await register({
         email: email.trim().toLowerCase(),
         password,
+        consent,
       });
 
       if (!response) {
@@ -68,6 +70,20 @@ export const RegisterPage = () => {
         return;
       }
 
+      if (
+        message.includes('Consent') ||
+        message.includes('consent') ||
+        message.includes('согласие')
+      ) {
+        addAlert(
+          'Для регистрации необходимо согласие на обработку персональных данных',
+          AlertStatus.Error,
+          AlertPosition.TopRight,
+        );
+
+        return;
+      }
+
       addAlert('Произошла ошибка при регистрации', AlertStatus.Error, AlertPosition.TopRight);
       console.error(error);
     } finally {
@@ -77,6 +93,10 @@ export const RegisterPage = () => {
 
   const handleSubmit = async (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    if (!consent) {
+      return;
+    }
 
     const emailMessage = validateEmail(email);
     const passwordMessage = validatePassword(password);
@@ -186,7 +206,29 @@ export const RegisterPage = () => {
                 }}
               />
 
-              <Button appearance="primary" size="large" type="submit" className="auth-form__submit">
+              <Checkbox
+                className="auth-form__consent"
+                checked={consent}
+                onChange={(_, data) => {
+                  setConsent(Boolean(data.checked));
+                }}
+                label={
+                  <span>
+                    Я принимаю <Link href={routeNames.TERMS_PAGE}>Правила пользования</Link> и даю
+                    согласие на обработку персональных данных для создания аккаунта и работы сервиса
+                    в соответствии с{' '}
+                    <Link href={routeNames.PRIVACY_POLICY_PAGE}>Политикой конфиденциальности</Link>.
+                  </span>
+                }
+              />
+
+              <Button
+                appearance="primary"
+                size="large"
+                type="submit"
+                className="auth-form__submit"
+                disabled={!consent}
+              >
                 Зарегистрироваться
               </Button>
 
