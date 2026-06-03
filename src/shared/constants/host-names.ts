@@ -41,9 +41,21 @@ export const routeNames = {
   SDK_DOCS_PAGE: '/sdk/:packageSlug/docs',
   SDK_DOCS_PAGE_DEEP: '/sdk/:packageSlug/docs/:sectionSlug',
 
-  /** Страница бенчмарка */
+  /** Страница запусков бенчмарка (репортов) */
   BENCHMARK_RUNS_PAGE: '/benchmark',
+
+  /** Страница создания запуска бенчмарка */
   CREATE_BENCHMARK_RUN_PAGE: '/benchmark/create',
+
+  /** Страница с прогоном тестирования бенчмарка */
   BENCHMARK_EXECUTION_PAGE: '/benchmark/run',
+
+  /** Страница отчета пройденного тестирования */
   BENCHMARK_RUN_PAGE: '/benchmark/:runId',
+
+  /** Страница политики конфиденциальности */
+  PRIVACY_POLICY_PAGE: '/privacy',
+
+  /** Страница правил пользования */
+  TERMS_PAGE: '/terms',
 };

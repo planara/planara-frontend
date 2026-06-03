@@ -8,6 +8,7 @@ import type {
   LogoutRequest,
   AuthResponse,
   LogoutResponse,
+  DeleteAccountResponse,
 } from '@/types';
 
 export type RegisterMutationData = {
@@ -41,6 +42,12 @@ export type LogoutMutationData = {
 export type LogoutMutationVariables = {
   request: LogoutRequest;
 };
+
+export type DeleteAccountMutationData = {
+  deleteAccount: DeleteAccountResponse;
+};
+
+export type DeleteAccountMutationVariables = Record<string, never>;
 
 /** Мутация на регистрацию */
 export const REGISTER_MUTATION = gql`
@@ -82,6 +89,14 @@ export const LOGIN_MUTATION = gql`
 export const LOGOUT_MUTATION = gql`
   mutation Logout($request: LogoutRequestInput!) {
     logout(request: $request) {
+      success
+    }
+  }
+`;
+
+export const DELETE_ACCOUNT_MUTATION = gql`
+  mutation DeleteAccount {
+    deleteAccount {
       success
     }
   }

@@ -22,12 +22,14 @@ import ServerErrorPage from '@/pages/error/server-error-page';
 import NotFoundPage from '@/pages/error/not-found-page';
 import LandingPage from '@/pages/landing';
 import SdkDocsPage from '@/pages/sdk/sdk-docs-page';
-import CreateProjectPage from '@/pages/projects/create-project-page.tsx';
-import ProjectPreviewPage from '@/pages/projects/project-preview-page.tsx';
-import BenchmarkRunPage from '@/pages/benchmark/benchmark-run-page.tsx';
-import BenchmarkExecutionPage from '@/pages/benchmark/benchmark-execution-page.tsx';
-import CreateBenchmarkRunPage from '@/pages/benchmark/create-benchmark-run-page.tsx';
-import BenchmarkRunsPage from '@/pages/benchmark/benchmark-runs-page.tsx';
+import CreateProjectPage from '@/pages/projects/create-project-page';
+import ProjectPreviewPage from '@/pages/projects/project-preview-page';
+import BenchmarkRunPage from '@/pages/benchmark/benchmark-run-page';
+import BenchmarkExecutionPage from '@/pages/benchmark/benchmark-execution-page';
+import CreateBenchmarkRunPage from '@/pages/benchmark/create-benchmark-run-page';
+import BenchmarkRunsPage from '@/pages/benchmark/benchmark-runs-page';
+import TermsPage from '@/pages/legal/terms-page';
+import PrivacyPolicyPage from '@/pages/legal/privacy-policy-page';
 // Apollo
 import { apolloClient } from '@/shared/apollo/client';
 import { ApolloProvider } from '@apollo/client/react';
@@ -36,11 +38,12 @@ import { ClipLoader } from 'react-spinners';
 import { useLoading } from '@/hooks/layout/use-loading.ts';
 import { LoadingProvider } from '@/shared/contexts/loading/loading-provider';
 // Alerts
-import Alert from '@/components/layout/alert.tsx';
+import Alert from '@/components/layout/alert';
 import type { AlertType } from '@/types';
 import { useAlerts } from '@/hooks';
 import { AlertProvider } from '@/shared';
 import { PrivateRoute, PublicRoute } from '@/components';
+
 
 // App layout
 const App = () => {
@@ -93,6 +96,8 @@ const App = () => {
         <Route path={routeNames.SERVER_ERROR_PAGE} element={<ServerErrorPage />} />
         <Route path={routeNames.SDK_DOCS_PAGE} element={<SdkDocsPage />} />
         <Route path={routeNames.SDK_DOCS_PAGE_DEEP} element={<SdkDocsPage />} />
+        <Route path={routeNames.PRIVACY_POLICY_PAGE} element={<PrivacyPolicyPage />} />
+        <Route path={routeNames.TERMS_PAGE} element={<TermsPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </>
