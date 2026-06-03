@@ -2,12 +2,14 @@
 import { Link } from 'react-router-dom';
 // Shared
 import { routeNames } from '@/shared';
+// Icons
+import logoIcon from '@/assets/logo.svg';
 
 const LandingHeader = () => {
   return (
     <header className="landing-header">
       <Link className="landing-header__brand" to={routeNames.LANDING_PAGE}>
-        <span className="landing-header__logo">P</span>
+        <img src={logoIcon} className="landing-header__logo" alt="logo" />
 
         <span className="landing-header__brand-text">
           <span className="landing-header__brand-name">Planara</span>

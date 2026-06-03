@@ -1,12 +1,12 @@
-// Components
+// Icons
 import {
   BeakerRegular,
-  BoxRegular,
   FolderRegular,
   HomeRegular,
   PersonRegular,
   SettingsRegular,
 } from '@fluentui/react-icons';
+import logoIcon from '@/assets/logo.svg';
 // Routing
 import { NavLink, useNavigate } from 'react-router-dom';
 // Shared
@@ -46,9 +46,7 @@ export const AppHeader = () => {
           type="button"
           onClick={() => navigate(routeNames.HOME_PAGE)}
         >
-          <span className="app-header__logo">
-            <BoxRegular />
-          </span>
+          <img src={logoIcon} className="app-header__logo" alt="logo" />
 
           <span className="app-header__brand-text">
             <span className="app-header__brand-name">Planara</span>

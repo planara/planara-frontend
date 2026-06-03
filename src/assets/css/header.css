@@ -39,9 +39,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #111111;
   color: #ffffff;
-  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.22);
 }
 
 .app-header__logo svg {
