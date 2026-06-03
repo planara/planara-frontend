@@ -1,0 +1,12 @@
+User-agent: *
+Allow: /
+
+Disallow: /home
+Disallow: /login
+Disallow: /register
+Disallow: /projects
+Disallow: /settings
+Disallow: /benchmark
+Disallow: /500
+
+Sitemap: https://planara.ru/sitemap.xml
