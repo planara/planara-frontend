@@ -1,5 +1,5 @@
 // Core
-import { useState } from 'react';
+import { type SubmitEvent, useState } from 'react';
 // Components
 import { AuthPageSteps, UiInput } from '@/components';
 import { Button, Text, Title1 } from '@fluentui/react-components';
@@ -7,16 +7,29 @@ import { Button, Text, Title1 } from '@fluentui/react-components';
 import { AuthSteps } from '@/types/auth';
 import { InputType } from '@/types';
 // Helpers
-import { clearError } from '@/shared';
+import { clearError, triggerShake, validateUsername } from '@/shared';
 
-export const AuthPagePersonal = (props: { emitNextStep: () => void }) => {
-  const { emitNextStep } = props;
+export const AuthPagePersonal = (props: {
+  onSubmit: (username: string, name: string, surname: string) => Promise<void>;
+  busy: boolean;
+}) => {
+  const { onSubmit, busy } = props;
   // Отображаемое имя пользователя
   const [username, setUsername] = useState('');
   // Имя
   const [name, setName] = useState('');
   // Фамилия
   const [surname, setSurname] = useState('');
+
+  const handleSubmit = async (event: SubmitEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const message = validateUsername(username.trim());
+    if (message) {
+      triggerShake('username', message);
+      return;
+    }
+    await onSubmit(username.trim(), name.trim(), surname.trim());
+  };
 
   return (
     <div className="auth-page__forms-container form-container">
@@ -34,7 +47,7 @@ export const AuthPagePersonal = (props: { emitNextStep: () => void }) => {
         </div>
       </div>
 
-      <form className="auth-form">
+      <form className="auth-form" onSubmit={handleSubmit}>
         <UiInput
           id="username"
           errorId="username-error"
@@ -89,7 +102,7 @@ export const AuthPagePersonal = (props: { emitNextStep: () => void }) => {
             size="large"
             type="submit"
             className="auth-form__submit"
-            onClick={() => emitNextStep()}
+            disabled={busy}
           >
             Подтвердить
           </Button>

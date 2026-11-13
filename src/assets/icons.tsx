@@ -74,7 +74,7 @@ export const GithubIcon = () => {
 
 export const YandexIcon = () => {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#FB3E1C" fill-rule="evenodd">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#FB3E1C" fillRule="evenodd">
       <title>Yandex</title>
       <path d="M16.376 12.644L21 2h-3.842l-4.624 10.644h3.842zM13.915 24v-3.733c0-2.822-.352-3.64-1.407-5.988L6.933 2H3l7.124 15.709V24h3.79z" />
     </svg>
@@ -84,7 +84,7 @@ export const YandexIcon = () => {
 export const VkIcon = () => {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 256 256">
-      <g clip-path="url(#prefix__a)">
+      <g clipPath="url(#prefix__a)">
         <mask id="prefix__a" width="256" height="256" x="0" y="0" maskUnits="userSpaceOnUse">
           <path fill="#fff" d="M256 0H0v256h256V0z" />
         </mask>

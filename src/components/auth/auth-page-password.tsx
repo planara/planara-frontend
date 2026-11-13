@@ -9,8 +9,11 @@ import { InputType } from '@/types';
 // Helpers
 import { clearError, triggerShake, validatePassword } from '@/shared';
 
-export const AuthPagePassword = (props: { emitNextStep: () => void }) => {
-  const { emitNextStep } = props;
+export const AuthPagePassword = (props: {
+  onSubmit: (password: string, confirmPassword: string) => Promise<void>;
+  busy: boolean;
+}) => {
+  const { onSubmit, busy } = props;
   // Пароль
   const [password, setPassword] = useState('');
   // Подтвержденный пароль
@@ -46,7 +49,7 @@ export const AuthPagePassword = (props: { emitNextStep: () => void }) => {
       return;
     }
 
-    emitNextStep();
+    await onSubmit(password, repeatPassword);
   };
 
   return (
@@ -101,7 +104,13 @@ export const AuthPagePassword = (props: { emitNextStep: () => void }) => {
         />
 
         <div className="auth-form__bottom">
-          <Button appearance="primary" size="large" type="submit" className="auth-form__submit">
+          <Button
+            appearance="primary"
+            size="large"
+            type="submit"
+            className="auth-form__submit"
+            disabled={busy}
+          >
             Подтвердить
           </Button>
         </div>

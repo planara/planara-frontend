@@ -148,3 +148,15 @@ export const apolloClient = new ApolloClient({
   link: ApolloLink.from([errorLink, authLink, httpLink]),
   cache: new InMemoryCache(),
 });
+
+/**
+ * Запросы регистрации проходят напрямую в auth через HTTP proxy gateway.
+ * Так браузер получает Set-Cookie с JWT регистрации и отправляет cookie
+ * на следующих шагах.
+ */
+export const registrationClient = new ApolloClient({
+  link: new HttpLink({
+    uri: `${graphqlUrl}/api/`,
+  }),
+  cache: new InMemoryCache(),
+});

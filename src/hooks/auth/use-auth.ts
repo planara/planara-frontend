@@ -3,27 +3,22 @@ import { useMutation } from '@apollo/client/react';
 // Queries / Mutations
 import {
   LOGIN_MUTATION,
-  REGISTER_MUTATION,
   LOGOUT_MUTATION,
   DELETE_ACCOUNT_MUTATION,
+  BEGIN_REGISTRATION_MUTATION,
   type LoginMutationData,
   type LoginMutationVariables,
-  type RegisterMutationData,
-  type RegisterMutationVariables,
   type LogoutMutationData,
   type LogoutMutationVariables,
   type DeleteAccountMutationData,
   type DeleteAccountMutationVariables,
+  type BeginRegistrationMutationVariables,
+  type BeginRegistrationMutationData,
 } from '@/graphql/auth';
 // Types
-import type { RegisterRequest, LoginRequest, LogoutRequest } from '@/types';
+import type { BeginRegistrationRequest, LoginRequest, LogoutRequest } from '@/types';
 
 export const useAuth = () => {
-  const [registerMutation, registerState] = useMutation<
-    RegisterMutationData,
-    RegisterMutationVariables
-  >(REGISTER_MUTATION);
-
   const [loginMutation, loginState] = useMutation<LoginMutationData, LoginMutationVariables>(
     LOGIN_MUTATION,
   );
@@ -37,14 +32,19 @@ export const useAuth = () => {
     DeleteAccountMutationVariables
   >(DELETE_ACCOUNT_MUTATION);
 
-  const register = async (request: RegisterRequest) => {
-    const response = await registerMutation({
+  const [beginRegistrationMutation, beginRegistrationState] = useMutation<
+    BeginRegistrationMutationData,
+    BeginRegistrationMutationVariables
+  >(BEGIN_REGISTRATION_MUTATION);
+
+  const beginRegistration = async (request: BeginRegistrationRequest) => {
+    const result = await beginRegistrationMutation({
       variables: {
         request,
       },
     });
 
-    return response.data?.register;
+    return result.data?.beginRegistration;
   };
 
   const login = async (login: LoginRequest) => {
@@ -74,21 +74,21 @@ export const useAuth = () => {
   };
 
   return {
-    register,
     login,
     logout,
     deleteAccount,
+    beginRegistration,
 
-    loading: registerState.loading || loginState.loading || deleteAccountState.loading,
-    error: registerState.error || loginState.error || deleteAccountState.error,
+    loading: loginState.loading || deleteAccountState.loading || beginRegistrationState.loading,
+    error: loginState.error || deleteAccountState.error || beginRegistrationState.error,
 
-    registerLoading: registerState.loading,
     loginLoading: loginState.loading,
-
-    registerError: registerState.error,
     loginError: loginState.error,
 
     deleteAccountLoading: deleteAccountState.loading,
     deleteAccountError: deleteAccountState.error,
+
+    beginRegistrationLoading: beginRegistrationState.loading,
+    beginRegistrationError: beginRegistrationState.error,
   };
 };

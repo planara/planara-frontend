@@ -5,3 +5,4 @@ export * from './auth-page-steps';
 export * from './auth-page-password';
 export * from './auth-page-personal';
 export * from './auth-confirmation-code';
+export * from './auth-page-avatar';

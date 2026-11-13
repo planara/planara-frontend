@@ -1,22 +1,35 @@
 // Core
-import { useState } from 'react';
+import { type SubmitEvent, useState } from 'react';
 // Components
 import { Button, Checkbox, Link, Text, Title1 } from '@fluentui/react-components';
 import { UiInput } from '@/components';
 // Types
 import { InputType } from '@/types';
 // Helpers
-import { clearError, routeNames } from '@/shared';
+import { clearError, routeNames, triggerShake, validateEmail } from '@/shared';
 // Icons
 import { GoogleIcon, GithubIcon, YandexIcon, VkIcon, AppleIcon } from '@/assets/icons';
 
-export const AuthPageEmail = (props: { emitNextStep: () => void }) => {
-  const { emitNextStep } = props;
+export const AuthPageEmail = (props: {
+  onSubmit: (email: string) => Promise<void>;
+  busy: boolean;
+}) => {
+  const { onSubmit, busy } = props;
 
   // Адрес электронной почты
   const [email, setEmail] = useState('');
   // Согласие на обработку персональных данных
   const [consent, setConsent] = useState(false);
+
+  const handleSubmit = async (event: SubmitEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const message = validateEmail(email.trim());
+    if (message) {
+      triggerShake('email', message);
+      return;
+    }
+    if (consent) await onSubmit(email.trim().toLowerCase());
+  };
 
   return (
     <div className="auth-page__forms-container form-container">
@@ -53,7 +66,7 @@ export const AuthPageEmail = (props: { emitNextStep: () => void }) => {
 
       <div className="auth-form__alternative-method">или</div>
 
-      <form className="auth-form">
+      <form className="auth-form" onSubmit={handleSubmit}>
         <UiInput
           id="email"
           errorId="email-error"
@@ -91,8 +104,7 @@ export const AuthPageEmail = (props: { emitNextStep: () => void }) => {
           size="large"
           type="submit"
           className="auth-form__submit"
-          disabled={!consent || email.length === 0}
-          onClick={emitNextStep}
+          disabled={!consent || busy}
         >
           Продолжить
         </Button>

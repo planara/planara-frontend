@@ -1,5 +1,5 @@
 // Core
-import { useState, useEffect } from 'react';
+import { type SubmitEvent, useState, useEffect } from 'react';
 // Components
 import { Button, Text, Title1 } from '@fluentui/react-components';
 import { AuthPageSteps, AuthConfirmationCode } from '@/components/auth';
@@ -7,15 +7,20 @@ import { AuthPageSteps, AuthConfirmationCode } from '@/components/auth';
 import { AuthSteps } from '@/types/auth';
 
 // Таймер повторной отправки письма с кодом
-const RESEND_TIMEOUT = 20;
+const RESEND_TIMEOUT = 10;
 
-export const AuthPageCode = (props: { emitNextStep: () => void }) => {
-  const { emitNextStep } = props;
+export const AuthPageCode = (props: {
+  onSubmit: (code: string) => Promise<void>;
+  onResend: () => Promise<number>;
+  busy: boolean;
+}) => {
+  const { onSubmit, onResend, busy } = props;
   // Код подтверждения почты
   const [code, setCode] = useState('');
 
   // Кол-во секунд до возможности отправки повторного письма с кодом
   const [secondsLeft, setSecondsLeft] = useState(RESEND_TIMEOUT);
+  const [codeKey, setCodeKey] = useState(0);
   const relativeTime = new Intl.RelativeTimeFormat('ru', {
     numeric: 'always',
   });
@@ -34,6 +39,20 @@ export const AuthPageCode = (props: { emitNextStep: () => void }) => {
     };
   }, [secondsLeft]);
 
+  const handleSubmit = async (event: SubmitEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (/^\d{4}$/.test(code)) await onSubmit(code);
+  };
+
+  const handleResend = async () => {
+    const cooldown = await onResend();
+    if (cooldown > 0) {
+      setSecondsLeft(cooldown);
+      setCode('');
+      setCodeKey((value) => value + 1);
+    }
+  };
+
   return (
     <div className="auth-page__forms-container form-container">
       <div className="auth-page__forms-container__corner" />
@@ -50,8 +69,8 @@ export const AuthPageCode = (props: { emitNextStep: () => void }) => {
         </div>
       </div>
 
-      <form className="auth-form">
-        <AuthConfirmationCode onChange={setCode} />
+      <form className="auth-form" onSubmit={handleSubmit}>
+        <AuthConfirmationCode key={codeKey} onChange={setCode} />
 
         <div className="auth-form__resend-code">
           {secondsLeft > 0 ? (
@@ -59,7 +78,9 @@ export const AuthPageCode = (props: { emitNextStep: () => void }) => {
               Повторная отправка будет доступна {relativeTime.format(secondsLeft, 'second')}.
             </Text>
           ) : (
-            <Button appearance="transparent">Отправить код повторно</Button>
+            <Button type="button" appearance="transparent" disabled={busy} onClick={handleResend}>
+              Отправить код повторно
+            </Button>
           )}
         </div>
 
@@ -69,8 +90,7 @@ export const AuthPageCode = (props: { emitNextStep: () => void }) => {
             size="large"
             type="submit"
             className="auth-form__submit"
-            disabled={!code || code.length !== 4}
-            onClick={() => emitNextStep()}
+            disabled={!/^\d{4}$/.test(code) || busy}
           >
             Подтвердить
           </Button>
