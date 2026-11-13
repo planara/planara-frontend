@@ -1,15 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CombinedGraphQLErrors } from '@apollo/client/errors';
-import { useApolloClient } from '@apollo/client/react';
 import { Button } from '@fluentui/react-components';
 import { LogoIcon } from '@/assets/icons';
 import { AuthPageCode, AuthPageEmail, AuthPagePassword, AuthPagePersonal } from '@/components/auth';
-import {
-  PROFILE_QUERY,
-  UPDATE_PROFILE_MUTATION,
-  type UpdateProfileMutationData,
-} from '@/graphql/accounts';
 import type { RegistrationFlow } from '@/graphql/auth';
 import { useRegistration } from '@/hooks/auth/use-registration';
 import { usePrivacy } from '@/hooks/privacy/use-privacy';
@@ -45,7 +39,6 @@ export const RegisterPage = () => {
   const registration = useRegistration();
   const { getCurrentConsentVersionId } = usePrivacy();
   const { addAlert } = useAlerts();
-  const client = useApolloClient();
   const navigate = useNavigate();
 
   const clearSession = () => {
@@ -198,41 +191,28 @@ export const RegisterPage = () => {
       applyFlow(flow);
     });
 
-  const complete = (username: string, name: string, surname: string) =>
+  const complete = (name: string, surname: string) =>
     run(async () => {
       if (!sessionToken) throw new Error('Missing registration session');
 
-      const response = await registration.complete({ name, surname }, sessionToken);
+      let response;
+
+      for (let attempt = 0; attempt < 6; attempt++) {
+        try {
+          response = await registration.complete({ name, surname }, sessionToken);
+          break;
+        } catch (error) {
+          if (graphError(error)?.extensions?.code !== 'CONSENT_REQUIRED' || attempt === 5)
+            throw error;
+
+          await new Promise((resolve) => window.setTimeout(resolve, 500));
+        }
+      }
+
       if (!response) throw new Error('Empty registration response');
 
       authStore.setSession(response);
       clearSession();
-
-      // Username is owned by accounts and can be set only after credentials are created.
-      try {
-        // Account profiles are created asynchronously from the UserCreated Kafka event.
-        for (let attempt = 0; attempt < 8; attempt++) {
-          try {
-            await client.query({ query: PROFILE_QUERY, fetchPolicy: 'no-cache' });
-            break;
-          } catch (error) {
-            if (attempt === 7) throw error;
-            await new Promise((resolve) => window.setTimeout(resolve, 500));
-          }
-        }
-
-        await client.mutate<UpdateProfileMutationData>({
-          mutation: UPDATE_PROFILE_MUTATION,
-          variables: { request: { username } },
-        });
-      } catch {
-        addAlert(
-          'Аккаунт создан. Имя пользователя можно добавить в настройках.',
-          AlertStatus.Error,
-          AlertPosition.TopRight,
-        );
-      }
-
       navigate(routeNames.HOME_PAGE, { replace: true });
     });
 

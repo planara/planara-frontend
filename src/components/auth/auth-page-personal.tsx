@@ -7,28 +7,19 @@ import { Button, Text, Title1 } from '@fluentui/react-components';
 import { AuthSteps } from '@/types/auth';
 import { InputType } from '@/types';
 // Helpers
-import { clearError, triggerShake, validateUsername } from '@/shared';
+import { clearError } from '@/shared';
 
 export const AuthPagePersonal = (props: {
-  onSubmit: (username: string, name: string, surname: string) => Promise<void>;
+  onSubmit: (name: string, surname: string) => Promise<void>;
   busy: boolean;
 }) => {
   const { onSubmit, busy } = props;
-  // Отображаемое имя пользователя
-  const [username, setUsername] = useState('');
-  // Имя
   const [name, setName] = useState('');
-  // Фамилия
   const [surname, setSurname] = useState('');
 
   const handleSubmit = async (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const message = validateUsername(username.trim());
-    if (message) {
-      triggerShake('username', message);
-      return;
-    }
-    await onSubmit(username.trim(), name.trim(), surname.trim());
+    await onSubmit(name.trim(), surname.trim());
   };
 
   return (
@@ -40,30 +31,11 @@ export const AuthPagePersonal = (props: {
         <AuthPageSteps step={AuthSteps.Personal} />
         <div className="auth-form__title-block">
           <Title1 className="auth-form__title">Расскажите о себе</Title1>
-
-          <Text className="auth-form__subtitle">
-            Укажите имя, фамилию и уникальный username для вашего профиля.
-          </Text>
+          <Text className="auth-form__subtitle">Укажите имя и фамилию для вашего профиля.</Text>
         </div>
       </div>
 
       <form className="auth-form" onSubmit={handleSubmit}>
-        <UiInput
-          id="username"
-          errorId="username-error"
-          label="Отображаемое имя"
-          type={InputType.Text}
-          value={username}
-          onChange={(event) => {
-            setUsername(event.target.value);
-            clearError('username');
-          }}
-          onClear={() => {
-            setUsername('');
-            clearError('username');
-          }}
-        />
-
         <UiInput
           id="name"
           errorId="name-error"
