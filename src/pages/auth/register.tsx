@@ -4,13 +4,7 @@ import { CombinedGraphQLErrors } from '@apollo/client/errors';
 import { useApolloClient } from '@apollo/client/react';
 import { Button } from '@fluentui/react-components';
 import { LogoIcon } from '@/assets/icons';
-import {
-  AuthPageAvatar,
-  AuthPageCode,
-  AuthPageEmail,
-  AuthPagePassword,
-  AuthPagePersonal,
-} from '@/components/auth';
+import { AuthPageCode, AuthPageEmail, AuthPagePassword, AuthPagePersonal } from '@/components/auth';
 import {
   PROFILE_QUERY,
   UPDATE_PROFILE_MUTATION,
@@ -27,6 +21,7 @@ import { authStore, routeNames } from '@/shared';
 const getUrlToken = () => new URLSearchParams(window.location.hash.slice(1)).get('session');
 const graphError = (error: unknown) =>
   CombinedGraphQLErrors.is(error) ? error.errors[0] : undefined;
+
 const toAuthStep = (step: RegistrationFlow['nextStep']): AuthSteps => {
   switch (step) {
     case 'CODE':
@@ -77,7 +72,9 @@ export const RegisterPage = () => {
   useEffect(() => {
     const token = tokenRef.current;
     if (!token) return;
+
     let active = true;
+
     registration
       .restore(token)
       .then((flow) => {
@@ -107,6 +104,7 @@ export const RegisterPage = () => {
       .finally(() => {
         if (active) setRestoring(false);
       });
+
     return () => {
       active = false;
     };
@@ -116,11 +114,13 @@ export const RegisterPage = () => {
 
   const run = async (action: () => Promise<void>) => {
     if (busy) return;
+
     setBusy(true);
     try {
       await action();
     } catch (error) {
       const issue = graphError(error);
+
       if (
         issue?.extensions?.code === 'REGISTRATION_SESSION_REQUIRED' ||
         issue?.extensions?.code === 'REGISTRATION_SESSION_EXPIRED'
@@ -132,6 +132,7 @@ export const RegisterPage = () => {
         if (typeof nextStep === 'string')
           setStep(toAuthStep(nextStep.toUpperCase() as RegistrationFlow['nextStep']));
       }
+
       addAlert(
         issue?.message ??
           (error instanceof Error
@@ -153,6 +154,7 @@ export const RegisterPage = () => {
         personalDataConsent: true,
         consentVersionId,
       });
+
       if (!flow) throw new Error('Empty registration response');
       applyFlow(flow);
     });
@@ -160,6 +162,7 @@ export const RegisterPage = () => {
   const verify = (code: string) =>
     run(async () => {
       if (!sessionToken) throw new Error('Missing registration session');
+
       const flow = await registration.verify({ code }, sessionToken);
       if (!flow) throw new Error('Empty registration response');
       applyFlow(flow);
@@ -167,6 +170,7 @@ export const RegisterPage = () => {
 
   const resend = async (): Promise<number> => {
     if (!sessionToken || busy) return 0;
+
     setBusy(true);
     try {
       await registration.resend(sessionToken);
@@ -188,6 +192,7 @@ export const RegisterPage = () => {
   const setPassword = (password: string, confirmPassword: string) =>
     run(async () => {
       if (!sessionToken) throw new Error('Missing registration session');
+
       const flow = await registration.setPassword({ password, confirmPassword }, sessionToken);
       if (!flow) throw new Error('Empty registration response');
       applyFlow(flow);
@@ -196,11 +201,13 @@ export const RegisterPage = () => {
   const complete = (username: string, name: string, surname: string) =>
     run(async () => {
       if (!sessionToken) throw new Error('Missing registration session');
+
       const response = await registration.complete({ name, surname }, sessionToken);
       if (!response) throw new Error('Empty registration response');
+
       authStore.setSession(response);
       clearSession();
-      setStep(AuthSteps.Avatar);
+
       // Username is owned by accounts and can be set only after credentials are created.
       try {
         // Account profiles are created asynchronously from the UserCreated Kafka event.
@@ -213,6 +220,7 @@ export const RegisterPage = () => {
             await new Promise((resolve) => window.setTimeout(resolve, 500));
           }
         }
+
         await client.mutate<UpdateProfileMutationData>({
           mutation: UPDATE_PROFILE_MUTATION,
           variables: { request: { username } },
@@ -224,27 +232,7 @@ export const RegisterPage = () => {
           AlertPosition.TopRight,
         );
       }
-    });
 
-  const finish = (avatarUrl?: string) =>
-    run(async () => {
-      if (avatarUrl) {
-        try {
-          const url = new URL(avatarUrl);
-          if (!['https:', 'http:'].includes(url.protocol)) throw new Error('Invalid avatar URL');
-        } catch {
-          addAlert(
-            'Укажите корректную ссылку на изображение',
-            AlertStatus.Error,
-            AlertPosition.TopRight,
-          );
-          return;
-        }
-        await client.mutate<UpdateProfileMutationData>({
-          mutation: UPDATE_PROFILE_MUTATION,
-          variables: { request: { avatarUrl } },
-        });
-      }
       navigate(routeNames.HOME_PAGE, { replace: true });
     });
 
@@ -262,6 +250,7 @@ export const RegisterPage = () => {
               <p className="landing-header__brand-caption">workspace</p>
             </div>
           </div>
+
           {restoreFailed ? (
             <Button onClick={() => window.location.reload()}>Повторить восстановление</Button>
           ) : restoring ? (
@@ -276,7 +265,6 @@ export const RegisterPage = () => {
                 <AuthPagePassword onSubmit={setPassword} busy={busy} />
               )}
               {step === AuthSteps.Personal && <AuthPagePersonal onSubmit={complete} busy={busy} />}
-              {step === AuthSteps.Avatar && <AuthPageAvatar onFinish={finish} busy={busy} />}
             </>
           )}
         </section>

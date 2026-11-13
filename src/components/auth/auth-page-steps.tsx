@@ -20,10 +20,6 @@ const steps = [
     step: AuthSteps.Personal,
     label: 'Профиль',
   },
-  {
-    step: AuthSteps.Avatar,
-    label: 'Аватар',
-  },
 ];
 
 export const AuthPageSteps = (props: { step: AuthSteps }) => {
