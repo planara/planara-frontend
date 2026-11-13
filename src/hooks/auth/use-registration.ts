@@ -1,5 +1,5 @@
 // Apollo
-import { useMutation } from '@apollo/client/react';
+import { useApolloClient, useMutation } from '@apollo/client/react';
 // Queries / Mutations
 import {
   REGISTRATION_FLOW_QUERY,
@@ -19,44 +19,40 @@ import {
   type SetRegistrationPasswordRequest,
   type SetRegistrationPersonalRequest,
 } from '@/graphql/auth';
-// Client
-import { registrationClient } from '@/shared/apollo/client';
 
 const registrationContext = (sessionToken?: string) => ({
-  headers: {
-    'X-Planara-Registration-Flow': '1',
-    ...(sessionToken ? { 'X-Planara-Registration-Token': sessionToken } : {}),
-  },
+  registration: true,
+  registrationToken: sessionToken,
 });
 
 export const useRegistration = () => {
+  const client = useApolloClient();
+
   const [beginMutation] = useMutation<BeginRegistrationData, { request: BeginRegistrationRequest }>(
     BEGIN_REGISTRATION_MUTATION,
-    { client: registrationClient },
   );
 
   const [verifyMutation] = useMutation<
     VerifyRegistrationCodeData,
     { request: VerifyRegistrationCodeRequest }
-  >(VERIFY_REGISTRATION_CODE_MUTATION, { client: registrationClient });
+  >(VERIFY_REGISTRATION_CODE_MUTATION);
 
   const [resendMutation] = useMutation<ResendRegistrationCodeData>(
     RESEND_REGISTRATION_CODE_MUTATION,
-    { client: registrationClient },
   );
 
   const [passwordMutation] = useMutation<
     SetRegistrationPasswordData,
     { request: SetRegistrationPasswordRequest }
-  >(SET_REGISTRATION_PASSWORD_MUTATION, { client: registrationClient });
+  >(SET_REGISTRATION_PASSWORD_MUTATION);
 
   const [completeMutation] = useMutation<
     CompleteRegistrationData,
     { request: SetRegistrationPersonalRequest }
-  >(COMPLETE_REGISTRATION_MUTATION, { client: registrationClient });
+  >(COMPLETE_REGISTRATION_MUTATION);
 
   const restore = async (sessionToken: string) => {
-    const response = await registrationClient.query<RegistrationFlowQueryData>({
+    const response = await client.query<RegistrationFlowQueryData>({
       query: REGISTRATION_FLOW_QUERY,
       context: registrationContext(sessionToken),
       fetchPolicy: 'no-cache',
