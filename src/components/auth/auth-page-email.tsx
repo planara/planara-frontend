@@ -1,7 +1,7 @@
 // Core
 import { type SubmitEvent, useState } from 'react';
 // Components
-import { Button, Checkbox, Link, Text, Title1 } from '@fluentui/react-components';
+import { Button, Checkbox, Link, Text, Title1, Tooltip } from '@fluentui/react-components';
 import { UiInput } from '@/components';
 // Types
 import { InputType } from '@/types';
@@ -47,21 +47,61 @@ export const AuthPageEmail = (props: {
       </div>
 
       <div className="auth-form__oauth-section">
-        <div className="auth-form__oauth-section__icon">
-          <GoogleIcon />
-        </div>
-        <div className="auth-form__oauth-section__icon">
-          <GithubIcon />
-        </div>
-        <div className="auth-form__oauth-section__icon">
-          <YandexIcon />
-        </div>
-        <div className="auth-form__oauth-section__icon">
-          <VkIcon />
-        </div>
-        <div className="auth-form__oauth-section__icon">
-          <AppleIcon />
-        </div>
+        <Tooltip content="Появится позже" relationship="description">
+          <div
+            className="auth-form__oauth-section__icon disabled"
+            role="button"
+            aria-disabled="true"
+            aria-label="Вход через Google"
+            tabIndex={0}
+          >
+            <GoogleIcon />
+          </div>
+        </Tooltip>
+        <Tooltip content="Появится позже" relationship="description">
+          <div
+            className="auth-form__oauth-section__icon disabled"
+            role="button"
+            aria-disabled="true"
+            aria-label="Вход через GitHub"
+            tabIndex={0}
+          >
+            <GithubIcon />
+          </div>
+        </Tooltip>
+        <Tooltip content="Появится позже" relationship="description">
+          <div
+            className="auth-form__oauth-section__icon disabled"
+            role="button"
+            aria-disabled="true"
+            aria-label="Вход через Яндекс"
+            tabIndex={0}
+          >
+            <YandexIcon />
+          </div>
+        </Tooltip>
+        <Tooltip content="Появится позже" relationship="description">
+          <div
+            className="auth-form__oauth-section__icon disabled"
+            role="button"
+            aria-disabled="true"
+            aria-label="Вход через VK"
+            tabIndex={0}
+          >
+            <VkIcon />
+          </div>
+        </Tooltip>
+        <Tooltip content="Появится позже" relationship="description">
+          <div
+            className="auth-form__oauth-section__icon disabled"
+            role="button"
+            aria-disabled="true"
+            aria-label="Вход через Apple"
+            tabIndex={0}
+          >
+            <AppleIcon />
+          </div>
+        </Tooltip>
       </div>
 
       <div className="auth-form__alternative-method">или</div>

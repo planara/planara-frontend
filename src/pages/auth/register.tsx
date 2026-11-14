@@ -219,7 +219,7 @@ export const RegisterPage = () => {
   return (
     <div className="page__layout">
       <div className="auth-page__layout">
-        <section className="auth-page__block">
+        <section className="auth-page__block registration-block">
           <div className="auth-page__forms-container logo-container">
             <div className="auth-page__forms-container__corner" />
             <div className="auth-page__forms-container__corner__circle" />

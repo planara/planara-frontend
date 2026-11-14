@@ -227,9 +227,14 @@
           height: 28px;
         }
 
-        &:hover {
+        &:not(.disabled):hover {
           background: #f7f7f7;
           border: 1px solid #111111;
+        }
+
+        &.disabled {
+          background: #f7f7f7;
+          cursor: not-allowed;
         }
       }
     }
@@ -756,4 +761,171 @@
 .auth-form__submit:disabled {
   cursor: not-allowed;
   opacity: 0.58;
+}
+
+@media (max-width: 920px) {
+  .auth-page__block.registration-block {
+    width: 100%;
+    min-height: 100svh;
+    padding: 32px 20px;
+    box-sizing: border-box;
+    flex-direction: column;
+    gap: 0;
+    background: #f7f7f7;
+  }
+
+  .registration-block > .auth-page__forms-container {
+    width: 100%;
+    max-width: 520px;
+    box-sizing: border-box;
+  }
+
+  .registration-block > .auth-page__forms-container.logo-container {
+    height: auto;
+    min-height: 120px;
+    padding: 40px 56px;
+  }
+
+  .registration-block > .auth-page__forms-container.form-container {
+    height: auto;
+    min-height: 540px;
+    padding-top: 64px;
+  }
+}
+
+@media (max-width: 520px) {
+  .auth-page__block.registration-block {
+    justify-content: flex-start;
+    padding: 16px;
+  }
+
+  .registration-block > .auth-page__forms-container.logo-container {
+    min-height: 104px;
+    padding: 40px 44px;
+  }
+
+  .registration-block .logo-container .landing-header__logo {
+    width: 32px;
+    height: 32px;
+  }
+
+  .registration-block .logo-container .logo-container__logo__title {
+    font-size: 20px;
+  }
+
+  .registration-block > .auth-page__forms-container.form-container {
+    min-height: 0;
+    padding: 60px 20px 24px;
+    flex: 1 0 auto;
+  }
+
+  .registration-block .auth-form__header {
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  .registration-block .auth-form__header .auth-form__registration-steps {
+    gap: 8px;
+  }
+
+  .registration-block
+  .auth-form__header
+  .auth-form__registration-steps
+  .auth-form__registration-steps__separator {
+    width: auto;
+    min-width: 8px;
+    max-width: none;
+    flex: 1;
+    margin-bottom: 18px;
+  }
+
+  .registration-block
+  .auth-form__header
+  .auth-form__registration-steps
+  .auth-form__registration-step__wrapper
+  .auth-form__registration-step {
+    width: 24px;
+    height: 24px;
+  }
+
+  .registration-block
+  .auth-form__header
+  .auth-form__registration-steps
+  .auth-form__registration-step__wrapper
+  span {
+    font-size: 11px;
+  }
+
+  .registration-block
+  > .auth-page__forms-container.form-container
+  .auth-form__oauth-section {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 8px;
+    margin-bottom: 24px;
+  }
+
+  .registration-block
+  > .auth-page__forms-container.form-container
+  .auth-form__oauth-section
+  .auth-form__oauth-section__icon {
+    width: 100%;
+    height: 44px;
+    box-sizing: border-box;
+  }
+
+  .registration-block
+  > .auth-page__forms-container.form-container
+  .auth-form__oauth-section
+  .auth-form__oauth-section__icon
+  svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .registration-block .auth-form .auth-form__confirmation-code {
+    height: auto;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  .registration-block
+  .auth-form
+  .auth-form__confirmation-code
+  .auth-form__confirmation-code__field {
+    width: 0;
+    min-width: 0;
+    max-width: 48px;
+    height: 56px;
+    flex: 1;
+  }
+
+  .registration-block .auth-form__footer {
+    flex-wrap: wrap;
+    text-align: center;
+  }
+
+  .registration-block .auth-form__resend-code {
+    text-align: center;
+  }
+}
+
+@media (max-width: 920px) {
+  .registration-block > .auth-page__forms-container.logo-container {
+    border-radius: 24px 24px 0 0;
+  }
+
+  .registration-block > .auth-page__forms-container.form-container {
+    border-radius: 0 0 24px 24px;
+  }
+}
+
+@media (max-width: 520px) {
+  .registration-block > .auth-page__forms-container.logo-container {
+    border-radius: 20px 20px 0 0;
+  }
+
+  .registration-block > .auth-page__forms-container.form-container {
+    border-radius: 0 0 20px 20px;
+  }
 }
