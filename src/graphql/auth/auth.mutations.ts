@@ -2,22 +2,15 @@
 import { gql } from '@apollo/client';
 // Types
 import type {
-  RegisterRequest,
   RefreshRequest,
   LoginRequest,
   LogoutRequest,
   AuthResponse,
   LogoutResponse,
   DeleteAccountResponse,
+  BeginRegistrationRequest,
+  RegistrationFlowResponse,
 } from '@/types';
-
-export type RegisterMutationData = {
-  register: AuthResponse;
-};
-
-export type RegisterMutationVariables = {
-  request: RegisterRequest;
-};
 
 export type RefreshMutationData = {
   refresh: AuthResponse;
@@ -49,17 +42,13 @@ export type DeleteAccountMutationData = {
 
 export type DeleteAccountMutationVariables = Record<string, never>;
 
-/** Мутация на регистрацию */
-export const REGISTER_MUTATION = gql`
-  mutation Register($request: RegisterRequestInput!) {
-    register(request: $request) {
-      accessToken
-      accessExpiresAtUtc
-      refreshToken
-      refreshExpiresAtUtc
-    }
-  }
-`;
+export type BeginRegistrationMutationData = {
+  beginRegistration: RegistrationFlowResponse;
+};
+
+export type BeginRegistrationMutationVariables = {
+  request: BeginRegistrationRequest;
+};
 
 /** Мутация на обновление токенов */
 export const REFRESH_MUTATION = gql`

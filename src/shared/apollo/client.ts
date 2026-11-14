@@ -142,9 +142,27 @@ const authLink = new SetContextLink(async (prevContext) => {
 
 const httpLink = new HttpLink({
   uri: `${graphqlUrl}/api/`,
+  credentials: 'include',
+});
+
+const registrationHeadersLink = new SetContextLink((prevContext) => {
+  const sessionToken = prevContext.registrationToken as string | undefined;
+
+  return {
+    headers: {
+      ...prevContext.headers,
+      'GraphQL-Preflight': '1',
+      'X-Planara-Registration-Flow': '1',
+      ...(sessionToken ? { 'X-Planara-Registration-Token': sessionToken } : {}),
+    },
+  };
 });
 
 export const apolloClient = new ApolloClient({
-  link: ApolloLink.from([errorLink, authLink, httpLink]),
+  link: ApolloLink.split(
+    (operation) => operation.getContext().registration === true,
+    ApolloLink.from([registrationHeadersLink, httpLink]),
+    ApolloLink.from([errorLink, authLink, httpLink]),
+  ),
   cache: new InMemoryCache(),
 });
